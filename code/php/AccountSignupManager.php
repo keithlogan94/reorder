@@ -92,30 +92,12 @@ class AccountSignupManager
 
         /* @var $db Database */
         $db = get_db();
+        $result = $db->callStoredProcedure('insert_crm_account',
+            [$accountType,$firstName,$lastName,$middleName,$email,$phoneNumber,$street1,
+                $street2,$city,$state,$zipCode,$country],
+            'ssssssssssss');
 
-        $insertQuery = <<<SQL
-INSERT INTO crm_account (account_type, first_name, last_name, middle_name, email_address  
-    ,phone_number,street1, street2,city,state,zip_code,country) VALUES
-    (?,?,?,?,?,?,?,?,?,?,?,?);
-SQL;
-
-        $accountId = $db->preparedQuery(
-            $insertQuery,
-            'ssssssssssss',
-            [
-                $accountType,
-                $firstName,
-                $lastName,
-                $middleName,
-                $email,
-                $phoneNumber,
-                $street1,
-                $street2,
-                $city,
-                $state,
-                $zipCode,
-                $country
-            ]);
+        $accountId = $result[0]['last_insert_id'];
 
         if (!is_integer($accountId)) throw new \Exception('insert statement failed to return account id');
 

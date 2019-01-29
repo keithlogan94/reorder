@@ -69,6 +69,11 @@ if (!$asm->doesAccountExist($createAccountEmail)) {
         'creating the account with email: ' . $createAccountEmail);
 }
 
+if ($asm->canCreateAccount($createAccountEmail)) {
+    throw new Exception('unit test failed (canCreateAccount): should not be able to create account: ' .
+        $createAccountEmail);
+}
+
 if ($account->getFirstName() !== $fname
 || $account->getLastName() !== $lname
 || $account->getMiddleName() !== $mname
