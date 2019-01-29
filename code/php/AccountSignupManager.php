@@ -63,16 +63,10 @@ class AccountSignupManager
     {
         /* @var $db Database*/
         $db = get_db();
-        $db->preparedQuery('SELECT * FROM crm_account WHERE email_address = ?', 's',[$email]);
-        if (is_null($db->getNumRowsReturned()) || !is_integer($db->getNumRowsReturned())) {
-            throw new \Exception('not expected get num rows to be null or not int');
-        }
-
-        if ($db->getNumRowsReturned() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $loadData = $db->callStoredProcedure('find_crm_account_by_email',
+            [$email],
+            's');
+        return count($loadData) > 0;
     }
 
     /**
