@@ -24,10 +24,20 @@ class Database
     private $resultArray = [];
     private $SQLArray = [];
 
+    private $numRowsReturned = null;
+
+    /**
+     * Database constructor.
+     * @throws \Exception
+     */
     public function __construct()
     {
         $this->link = mysqli_connect(self::DB_HOST, self::DB_USER, self::DB_PASS, self::DB_NAME);
         $this->checkSuccessfulConnection();
+    }
+
+    public function getNumRowsReturned() {
+        return $this->numRowsReturned;
     }
 
     public function __destruct()
@@ -61,6 +71,8 @@ class Database
         }
         mysqli_stmt_bind_param($stmt, $paramTypes, ...$paramValues);
         $success = mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        $this->numRowsReturned = mysqli_stmt_num_rows($stmt);
         if ($success === TRUE) {
             if (strpos($SQL, 'INSERT INTO') !== FALSE) return mysqli_insert_id($this->link);
             $result = mysqli_stmt_get_result($stmt);
@@ -162,7 +174,7 @@ SQL;
     private function checkSuccessfulConnection()
     {
         if (is_null($this->link) || !$this->link) {
-            $error = '';
+            @$error = '';
             $error = "Error: Unable to connect to MySQL." . PHP_EOL;
             $error .= "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
             $error .= "Debugging error: " . mysqli_connect_error() . PHP_EOL;
