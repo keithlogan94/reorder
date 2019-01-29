@@ -26,6 +26,11 @@ function get_unit_test_files() {
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
+    <script>
+        setInterval(function () {
+            runAllUnitTests();
+        }, 5000)
+    </script>
 </head>
 <body>
     <button onclick="runAllUnitTests();">Run all unit tests</button>
