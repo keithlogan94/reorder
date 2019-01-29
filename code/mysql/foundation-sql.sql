@@ -1,12 +1,4 @@
 
-
-
-
-
-
-
-
-CALL insert_crm_account('personal', 'Keith','Becker','Logan','keithloganbecker94@gmail.com','phone','street','street2','city','state','zip','country');
 DROP PROCEDURE IF EXISTS insert_crm_account;
 CREATE PROCEDURE insert_crm_account(
   p_account_type ENUM('business','personal'),
@@ -77,7 +69,5 @@ DROP PROCEDURE IF EXISTS find_crm_account_by_email;
 CREATE PROCEDURE find_crm_account_by_email(p_email_address VARCHAR(200))
 BEGIN
   SELECT * FROM crm_account WHERE email_address = p_email_address LIMIT 1;
-
-
 END;
 
