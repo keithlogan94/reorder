@@ -28,7 +28,7 @@ class AccountSignupManager
      * @param $zipCode
      * @param $state
      * @param $country
-     * @return Account
+     * @return bool|Account
      * @throws \Exception
      */
     public function requestCreateAccount($accountType, $firstName, $lastName, $middleName, $email,
@@ -39,6 +39,8 @@ class AccountSignupManager
             return $this->createAccount($accountType, $firstName, $lastName, $middleName, $email,
                 $phoneNumber, $street1, $street2, $city, $zipCode,
                 $state, $country);
+        } else {
+            return false;
         }
     }
 

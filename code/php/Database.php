@@ -71,11 +71,10 @@ class Database
         }
         mysqli_stmt_bind_param($stmt, $paramTypes, ...$paramValues);
         $success = mysqli_stmt_execute($stmt);
-        mysqli_stmt_store_result($stmt);
-        $this->numRowsReturned = mysqli_stmt_num_rows($stmt);
         if ($success === TRUE) {
             if (strpos($SQL, 'INSERT INTO') !== FALSE) return mysqli_insert_id($this->link);
             $result = mysqli_stmt_get_result($stmt);
+            $this->numRowsReturned = mysqli_num_rows($result);
             $this->resultArray[] = $result;
             mysqli_stmt_close($stmt);
             return $result;
