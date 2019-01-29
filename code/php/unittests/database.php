@@ -22,10 +22,27 @@ $row = $db->getSingleRow('crm_account','email_address','keithloganbecker94@gmail
 if (empty($row)) {
     throw new Exception('unit test failed (getSingleRow): failed to get account row');
 }
-var_dump($row);
 
 
+$rows = $db->getRows('crm_account', 'WHERE email_address = ?',
+    's', ['keithloganbecker94@gmail.com']);
+
+if (mysqli_num_rows($result) !== count($rows))
+    throw new Exception('unit test failed (getRows): row count does not match other query row count');
+
+$normalQueryRows = [];
+while ($row = mysqli_fetch_row($result)) {
+    $normalQueryRows[] = $row;
+}
+
+if ($rows != $normalQueryRows) {
+    throw new Exception('unit test failed (getRows): rows do not match normal query rows');
+}
+
+session_start();
+$_SESSION['okay_unit_tests'][] = 'database.php';
 echo 'All unit tests ran okay!';
+header('Location: http://localhost/code/php/unittests/index.php');
 
 
 

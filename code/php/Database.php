@@ -105,6 +105,26 @@ SQL;
         $db->preparedQuery($updateSQL, $valueType.$whereColumnType, [$value, $whereColumnValue]);
     }
 
+    public function getRows($table, $whereClause, $valueTypesStr, $valueTypesArray)
+    {
+        if (!is_string($table)) throw new \Exception('$table must be string');
+        if (!is_string($whereClause)) throw new \Exception('$whereClause must be string');
+        if (!is_string($valueTypesStr)) throw new \Exception('$valueTypesStr must be string');
+        if (!is_array($valueTypesArray)) throw new \Exception('$valueTypesArray must be string');
+        if (strlen($valueTypesStr) !== count($valueTypesArray)) throw new \Exception('value type str' .
+            ' and value types array must be same length.');
+
+        $SQL = 'SELECT * FROM ' . $table . ' ' . $whereClause;
+
+        $result = $this->preparedQuery($SQL, $valueTypesStr, $valueTypesArray);
+
+        $rows = [];
+        while ($row = mysqli_fetch_row($result)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
 
     /**
      * @param $table

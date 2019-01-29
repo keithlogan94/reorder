@@ -26,6 +26,10 @@ if ($asm->doesAccountExist('keithloganbecker94@gmail.com') === false) {
         'keithloganbecker94@gmail.com');
 }
 
+if ($asm->doesAccountExist('alsdkfjaslkdjfalskdjflaskdjflaksjd1312@glkajsdf.com')) {
+    throw new Exception('unit test failed (doesAccountExist): account should not exit.');
+}
+
 if ($asm->canCreateAccount('keithloganbecker94@gmail.com') !== false ||
     $asm->canCreateAccount('keithloganbecker94@gmail.com') ===
     $asm->doesAccountExist('keithloganbecker94@gmail.com')) {
@@ -73,5 +77,7 @@ if ($account->getFirstName() !== $fname
     throw new Exception('unit test failed (requestCreateAccount): one or more values from creating account ' .
         'do not match');
 }
-
+session_start();
+$_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';
+header('Location: http://localhost/code/php/unittests/index.php');
