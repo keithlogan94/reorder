@@ -7,9 +7,11 @@
  */
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/AccountSignupManager.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 use code\php\Database;
 use code\php\AccountSignupManager;
+use code\php\Account;
 
 session_start();
 while (($key = array_search('account.php', $_SESSION['okay_unit_tests'])) !== false) {
@@ -82,5 +84,14 @@ if ($account->getFirstName() !== $fname
     throw new Exception('unit test failed (requestCreateAccount): one or more values from creating account ' .
         'do not match');
 }
+
+$account = new \code\php\Account('keithloganbecker94@gmail.com');
+$account2 = new Account($account->getCrmAccountId());
+
+if ($account->getStreet1() !== $account2->getStreet1() || $account->getFirstName() !== $account2->getFirstName()) {
+    throw new Exception('unit test failed (loadByEmail): failed to load info correctly');
+}
+
+
 $_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';

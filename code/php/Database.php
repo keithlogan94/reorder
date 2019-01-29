@@ -45,6 +45,22 @@ class Database
         mysqli_close($this->link);
     }
 
+    public function callStoredProcedure($procedureName, $paramValuesArray, $paramValueTypesStr)
+    {
+        $result = $this->preparedQuery('CALL ' . $procedureName . '(' .  substr(str_repeat(',?', count($paramValuesArray)), 1) . ')',
+            $paramValueTypesStr, $paramValuesArray);
+
+        if (is_bool($result)) {
+            return $result;
+        }
+
+        $rows = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
     /**
      * @param $SQL
      * @param $paramTypes
@@ -74,7 +90,9 @@ class Database
         if ($success === TRUE) {
             if (strpos($SQL, 'INSERT INTO') !== FALSE) return mysqli_insert_id($this->link);
             $result = mysqli_stmt_get_result($stmt);
-            $this->numRowsReturned = mysqli_num_rows($result);
+            if (!is_bool($result)) {
+                $this->numRowsReturned = mysqli_num_rows($result);
+            }
             $this->resultArray[] = $result;
             mysqli_stmt_close($stmt);
             return $result;
