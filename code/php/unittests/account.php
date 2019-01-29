@@ -11,6 +11,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 use code\php\Database;
 use code\php\AccountSignupManager;
 
+session_start();
+while (($key = array_search('account.php', $_SESSION['okay_unit_tests'])) !== false) {
+    unset($_SESSION['okay_unit_tests'][$key]);
+}
+
 /* @var $db Database*/
 $db = \code\php\get_db();
 
@@ -77,7 +82,6 @@ if ($account->getFirstName() !== $fname
     throw new Exception('unit test failed (requestCreateAccount): one or more values from creating account ' .
         'do not match');
 }
-session_start();
 $_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';
 header('Location: http://localhost/code/php/unittests/index.php');

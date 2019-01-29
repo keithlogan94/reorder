@@ -10,6 +10,11 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 use code\php\Database;
 
+session_start();
+while (($key = array_search('database.php', $_SESSION['okay_unit_tests'])) !== false) {
+    unset($_SESSION['okay_unit_tests'][$key]);
+}
+
 /* @var $db Database*/
 $db = \code\php\get_db();
 
@@ -39,7 +44,6 @@ if ($rows != $normalQueryRows) {
     throw new Exception('unit test failed (getRows): rows do not match normal query rows');
 }
 
-session_start();
 $_SESSION['okay_unit_tests'][] = 'database.php';
 echo 'All unit tests ran okay!';
 header('Location: http://localhost/code/php/unittests/index.php');
