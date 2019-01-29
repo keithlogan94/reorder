@@ -84,4 +84,3 @@ if ($account->getFirstName() !== $fname
 }
 $_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';
-header('Location: http://localhost/code/php/unittests/index.php');

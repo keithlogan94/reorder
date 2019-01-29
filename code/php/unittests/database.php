@@ -46,7 +46,6 @@ if ($rows != $normalQueryRows) {
 
 $_SESSION['okay_unit_tests'][] = 'database.php';
 echo 'All unit tests ran okay!';
-header('Location: http://localhost/code/php/unittests/index.php');
 
 
 
