@@ -48,7 +48,7 @@ class LoginCredentials
         $db = get_db();
         $result = $db->callStoredProcedure('update_crm_login_credentials',
             [$username, $password, $this->accountId],
-            'iss');
+            'ssi');
     }
 
     public function hasLoginCredentials($accountId)

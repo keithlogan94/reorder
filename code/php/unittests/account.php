@@ -141,6 +141,15 @@ if (!$loginCredentials->processLogin($account->getEmailAddress(), 'asdf')) {
         'to login with good credentials.');
 }
 
+$loginCredentials->updateLoginCredentials('updated username', 'asdff');
+
+$loginCredentials->endLogin();
+
+if (!$loginCredentials->processLogin('updated username', 'asdff')) {
+    throw new Exception('unit test failed (updateLoginCredentials): should have been able to login' .
+        ' with updated login credentials.');
+}
+
 
 $_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';
