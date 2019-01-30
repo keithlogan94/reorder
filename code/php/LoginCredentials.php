@@ -8,9 +8,8 @@
 
 namespace code\php;
 
-use mysql_xdevapi\Exception;
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
 
 class LoginCredentials
 {
@@ -27,7 +26,41 @@ class LoginCredentials
      */
     public function __construct($accountId)
     {
-        if (!is_numeric($accountId)) throw new \Exception('$accountId must be numeric');
+    }
+
+    /**
+     * @param $accountId
+     * @throws \Exception
+     */
+    public function generateLoginCredentials($accountId, $username, $password)
+    {
+        if ($this->hasLoginCredentials($accountId)) throw new \Exception('user already has login credentials');
+        /* @var $db Database*/
+        $db = get_db();
+        $result = $db->callStoredProcedure('insert_crm_login_credentials',
+            [$accountId, $username, $password],
+            'iss');
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     * @throws \Exception
+     */
+    public function updateLoginCredentials($username, $password)
+    {
+        if (!$this->isLoggedIn()) {
+            throw new \Exception('must be logged in to update login credentials');
+        }
+        /* @var $db Database*/
+        $db = get_db();
+        $result = $db->callStoredProcedure('update_crm_login_credentials',
+            [$username, $password, $this->accountId],
+            'iss');
+    }
+
+    public function hasLoginCredentials($accountId)
+    {
         /* @var $db Database*/
         $db = get_db();
         $result = $db->callStoredProcedure('find_crm_login_credentials_by',
@@ -35,34 +68,71 @@ class LoginCredentials
             'ss');
 
         if (empty($result)) {
-            throw new \Exception('no login credentials found for account id: ' . $accountId);
+            return false;
+        } else {
+            return true;
         }
+    }
+
+
+    /**
+     * @param $usernameOrEmail
+     * @param $password
+     * @return bool|Account
+     * @throws \Exception
+     */
+    public function processLogin($usernameOrEmail, $password)
+    {
+        if ($this->isLoggedIn()) return true;
+        if (!is_string($usernameOrEmail)) throw new \Exception('$usernameOrEmail must be a string');
+        if (!is_string($password)) throw new \Exception('$password must be a string');
+
+        /* @var $db Database*/
+        $db = get_db();
+
+        if (strpos($usernameOrEmail, '@') !== FALSE) {
+            $result = $db->callStoredProcedure('find_crm_login_credentials_by',
+                ['email',(string)$usernameOrEmail],
+                'ss');
+        } else {
+            $result = $db->callStoredProcedure('find_crm_login_credentials_by',
+                ['username',(string)$usernameOrEmail],
+                'ss');
+        }
+
+        if (empty($result)) {
+            return false;
+        }
+
+        if ($password !== $result[0]['password'])
+            return false;
 
         $this->username = $result[0]['username'];
         $this->password = $result[0]['password'];
         $this->accountId = $result[0]['crm_account_id'];
         $this->email = $result[0]['email_address'];
 
-        if ($this->accountId != $accountId) throw new \Exception('accountId and login ' .
-            'credential account id do not match');
+        $_SESSION['loggedin_account_id'] = $this->crm_account_id;
+        $_SESSION['loggedin_email'] = $this->email_address;
+        $_SESSION['loggedin_time'] = date('Y-m-d H:i:s');
 
+        $account =  new Account((int)$this->accountId);
+        $account->setLoginCredentials($this);
+        return $account;
 
     }
 
-    /**
-     * @param $usernameOrEmail
-     * @param $password
-     * @return bool
-     * @throws \Exception
-     */
-    public function isValidLoginCredentials($usernameOrEmail, $password)
+
+    public function isLoggedIn()
     {
-        if (!is_string($usernameOrEmail) || !is_string($password))
-            throw new \Exception('$usernameOrEmail and $password must be strings');
-        if (($this->password === $password) &&
-            ($usernameOrEmail === $this->username || $usernameOrEmail === $this->email))
-            return true;
-        else return false;
+        return isset($_SESSION['loggedin_email']) && $_SESSION['loggedin_email'] === $this->email;
+    }
+
+    public function endLogin()
+    {
+        unset($_SESSION['loggedin_account_id']);
+        unset($_SESSION['loggedin_email']);
+        unset($_SESSION['loggedin_time']);
     }
 
 }

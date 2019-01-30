@@ -25,6 +25,22 @@ class Account
     private $loginCredentials;
 
     /**
+     * @return mixed
+     */
+    public function getLoginCredentials()
+    {
+        return $this->loginCredentials;
+    }
+
+    /**
+     * @param mixed $loginCredentials
+     */
+    public function setLoginCredentials($loginCredentials)
+    {
+        $this->loginCredentials = $loginCredentials;
+    }
+
+    /**
      * Account constructor.
      * @param $accountId
      * @throws \Exception
@@ -95,36 +111,9 @@ class Account
         }
     }
 
-    /**
-     * @param $usernameOrEmail
-     * @param $password
-     * @return bool
-     * @throws \Exception
-     */
-    public function processLogin($usernameOrEmail, $password)
-    {
-        if (is_null($this->loginCredentials)) {
-            $this->loginCredentials = new LoginCredentials($this->crm_account_id);
-        }
-        $isValid = $this->loginCredentials->isValidLoginCredentials($usernameOrEmail, $password);
 
-        if (!$isValid) return false;
 
-        session_start();
 
-        $_SESSION['loggedin_account_id'] = $this->crm_account_id;
-        $_SESSION['loggedin_email'] = $this->email_address;
-        $_SESSION['loggedin_time'] = date('Y-m-d H:i:s');
-
-        return true;
-    }
-
-    public function endLogin()
-    {
-        unset($_SESSION['loggedin_account_id']);
-        unset($_SESSION['loggedin_email']);
-        unset($_SESSION['loggedin_time']);
-    }
 
     /**
      * @return mixed
