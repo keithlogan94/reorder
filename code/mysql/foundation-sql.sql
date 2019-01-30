@@ -111,16 +111,22 @@ CREATE PROCEDURE find_crm_login_credentials_by(p_by_what ENUM ('email','accountI
 BEGIN
   IF (p_by_what = 'email') THEN
     #find by email
-    SELECT c.*
+    SELECT c.*, a.email_address AS 'email_address'
     FROM crm_login_credentials c
            INNER JOIN crm_account a ON c.crm_account_id = a.crm_account_id
     WHERE a.email_address = p_data;
   ELSEIF (p_by_what = 'accountId') THEN
     #find by account id
-    SELECT * FROM crm_login_credentials WHERE crm_account_id = CAST(p_data AS UNSIGNED);
+    SELECT c.*, a.email_address AS 'email_address'
+    FROM crm_login_credentials c
+           INNER JOIN crm_account a ON c.crm_account_id = a.crm_account_id
+    WHERE c.crm_account_id = CAST(p_data AS UNSIGNED);
   ELSEIF (p_by_what = 'username') THEN
     #find by username
-    SELECT * FROM crm_login_credentials WHERE username = p_data;
+    SELECT c.*, a.email_address AS 'email_address'
+    FROM crm_login_credentials c
+           INNER JOIN crm_account a ON c.crm_account_id = a.crm_account_id
+    WHERE c.username = p_data;
   END IF;
 END;
 
