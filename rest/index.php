@@ -9,6 +9,8 @@
 
 require_once $_SERVER['DOCUMENT_ROOT' ] . '/code/php/RestApi.php';
 
+session_start();
+
 use code\php\RestApi;
 
 $rest = new RestApi();
