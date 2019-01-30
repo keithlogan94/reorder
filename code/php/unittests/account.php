@@ -150,6 +150,26 @@ if (!$loginCredentials->processLogin('updated username', 'asdff')) {
         ' with updated login credentials.');
 }
 
+$loginCredentials->endLogin();
+
+if ($loginCredentials->processLogin($account->getEmailAddress(), 'asdf')) {
+    throw new Exception('unit test failed (processLogin): should not have been able to login ' .
+        'with bad credentials.');
+}
+
+if (!$loginCredentials->processLogin($account->getEmailAddress(), 'asdff')) {
+    throw new Exception('unit test failed (processLogin): should have been able to login ' .
+        'with good credentials.');
+}
+
+if (!$loginCredentials->processLogin('asldkfjasdlkfjasdlkfj','asldkfjasdlfkj')) {
+    throw new Exception('unit test failed (processLogin): should return true because already logged in');
+}
+
+if (!$loginCredentials->isLoggedIn()) {
+    throw new Exception('unit test failed (isLoggedIn): should return that is logged in');
+}
+
 
 $_SESSION['okay_unit_tests'][] = 'account.php';
 echo 'All unit tests ran okay!';
