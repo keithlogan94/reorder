@@ -32,20 +32,36 @@ class RestApi
         $country = $_POST['country'];
         $zip = $_POST['zip'];
 
-        $asm = new AccountSignupManager();
-        if (!$asm->canCreateAccount($email)) {
+        try {
+            $asm = new AccountSignupManager();
+            if (!$asm->canCreateAccount($email)) {
+                $out = [
+                    'status' => 'failed',
+                    'message' => 'Can not create an account with that email. Account already exists.'
+                ];
+                echo json_encode($out);
+                exit;
+            }
+            $account = $asm->requestCreateAccount($accountType, $fname, $lname, $mname, $email, $phone, $street1, $street2,
+                $city, $zip, $state, $country);
+            if (!$account) {
+                $out = [
+                    'status' => 'failed',
+                    'message' => 'Failed creating account with unknown reason.'
+                ];
+                echo json_encode($out);
+                exit;
+            }
+            $loginCred = new LoginCredentials();
+            $loginCred->generateLoginCredentials($account->getCrmAccountId(), $username, $password);
             $out = [
-                'status' => 'failed',
-                'message' => 'Can not create an account with that email. Account already exists.'
+                'status' => 'success',
+                'message' => 'Successfully created an account.',
+                'accountId' => $account->getCrmAccountId(),
             ];
             echo json_encode($out);
             exit;
-        }
-
-        $account = $asm->requestCreateAccount($accountType, $fname, $lname,$mname,$email,$phone,$street1, $street2,
-            $city, $zip, $state, $country);
-
-        if (!$account) {
+        } catch (\Exception $e) {
             $out = [
                 'status' => 'failed',
                 'message' => 'Failed creating account with unknown reason.'
@@ -53,17 +69,6 @@ class RestApi
             echo json_encode($out);
             exit;
         }
-
-        $loginCred = new LoginCredentials();
-        $loginCred->generateLoginCredentials($account->getCrmAccountId(), $username, $password);
-
-        $out = [
-            'status' => 'success',
-            'message' => 'Successfully created an account.',
-            'accountId' => $account->getCrmAccountId(),
-        ];
-        echo json_encode($out);
-        exit;
     }
 
 }
