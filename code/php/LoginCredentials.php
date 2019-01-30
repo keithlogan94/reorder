@@ -19,14 +19,6 @@ class LoginCredentials
     private $accountId;
     private $email;
 
-    /**
-     * LoginCredentials constructor.
-     * @param $accountId
-     * @throws \Exception
-     */
-    public function __construct($accountId)
-    {
-    }
 
     /**
      * @param $accountId
@@ -112,8 +104,8 @@ class LoginCredentials
         $this->accountId = $result[0]['crm_account_id'];
         $this->email = $result[0]['email_address'];
 
-        $_SESSION['loggedin_account_id'] = $this->crm_account_id;
-        $_SESSION['loggedin_email'] = $this->email_address;
+        $_SESSION['loggedin_account_id'] = $this->accountId;
+        $_SESSION['loggedin_email'] = $this->email;
         $_SESSION['loggedin_time'] = date('Y-m-d H:i:s');
 
         $account =  new Account((int)$this->accountId);

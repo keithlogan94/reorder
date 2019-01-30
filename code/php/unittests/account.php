@@ -9,9 +9,11 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/AccountSignupManager.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/LoginCredentials.php';
 use code\php\Database;
 use code\php\AccountSignupManager;
 use code\php\Account;
+use code\php\LoginCredentials;
 
 session_start();
 while (($key = array_search('account.php', $_SESSION['okay_unit_tests'])) !== false) {
@@ -95,6 +97,48 @@ $account2 = new Account($account->getCrmAccountId());
 
 if ($account->getStreet1() !== $account2->getStreet1() || $account->getFirstName() !== $account2->getFirstName()) {
     throw new Exception('unit test failed (loadByEmail): failed to load info correctly');
+}
+
+$account = $asm->requestCreateAccount($accountType,$fname,$lname,$mname,
+    'testlogincred'.rand(1,1000000).'@gmail.com',$phone,$street,$street2,$city,
+    $zip,$state,$country);
+
+$loginCredentials = new LoginCredentials();
+if ($loginCredentials->hasLoginCredentials($account->getCrmAccountId())) {
+    throw new Exception('unit test failed: (hasLoginCredentials): user should not have ' .
+        'login credentials yet.');
+}
+
+$loginCredentials->generateLoginCredentials($account->getCrmAccountId(), 'test username', 'asdf');
+
+if (!$loginCredentials->hasLoginCredentials($account->getCrmAccountId())) {
+    throw new Exception('unit test failed (hasLoginCredentials): user should have login credentials.');
+}
+
+$loggedInAccount = $loginCredentials->processLogin($account->getEmailAddress(), 'asdf');
+
+if (!$loginCredentials->isLoggedIn()) {
+    throw new Exception('unit test failed (processLogin): should be logged in now');
+}
+
+if ($loggedInAccount->getEmailAddress() !== $account->getEmailAddress()) {
+    throw new Exception('unit test failed (processLogin): returned account should match this account');
+}
+
+$loggedInAccount->getLoginCredentials()->endLogin();
+
+if ($loggedInAccount->getLoginCredentials()->isLoggedIn()) {
+    throw new Exception('unit test failed (endLogin): should not be logged in any more');
+}
+
+if ($loginCredentials->processLogin($account->getEmailAddress(), 'alsdkfjaslkd')) {
+    throw new Exception('unit test failed (processLogin): should not have been able ' .
+        'to login with bad credentials.');
+}
+
+if (!$loginCredentials->processLogin($account->getEmailAddress(), 'asdf')) {
+    throw new Exception('unit test failed (processLogin): should have been able ' .
+        'to login with good credentials.');
 }
 
 
