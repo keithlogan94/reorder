@@ -12,9 +12,9 @@ namespace code\php;
 class Database
 {
 
-    const DB_NAME = 'sms_shop';
+    const DB_NAME = 'reorder';
     const DB_PASS = 'c4hahaven%jkb72rAs';
-    const DB_USER = 'db_user1';
+    const DB_USER = 'root';
     const DB_HOST = 'localhost';
 
     private $link = null;
