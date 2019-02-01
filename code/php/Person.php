@@ -47,9 +47,8 @@ class Person
         $db = get_db();
         $db->callStoredProcedure(
             'update_crm_account',
-            [$this->account_type,$this->first_name,$this->last_name,$this->middle_name,$this->email_address,$this->phone_number,$this->street1,
-                $this->street2,$this->city,$this->state,$this->zip_code,$this->country,$this->crm_account_id],
-            'ssssssssssssi'
+            [$this->firstName,$this->lastName,$this->middleName,$this->emailAddress,$this->phoneNumber,$this->gender,$this->birthday,$this->accountId],
+            'sssssssi'
         );
     }
 
