@@ -1,4 +1,8 @@
+
 DROP PROCEDURE IF EXISTS insert_crm_account;
+
+DELIMITER $$
+
 CREATE PROCEDURE insert_crm_account(p_first_name VARCHAR(50),
                                     p_last_name VARCHAR(50),
                                     p_middle_name VARCHAR(50),
@@ -8,7 +12,7 @@ CREATE PROCEDURE insert_crm_account(p_first_name VARCHAR(50),
                                     p_birthday DATE)
 BEGIN
 
-  DECLARE crm_account_id INT;
+  DECLARE accountId INT;
 
   INSERT INTO crm_account (add_time)
   VALUES (NOW());
@@ -16,10 +20,13 @@ BEGIN
   SET crm_account_id = (SELECT LAST_INSERT_ID());
 
   INSERT INTO crm_person (crm_account_id,first_name,last_name,middle_name,birthday,gender,phone_number)
-  VALUES (crm_account_id,p_first_name,p_last_name,p_middle_name,p_birthday,p_gender,p_phone_number);
+  VALUES (accountId,p_first_name,p_last_name,p_middle_name,p_birthday,p_gender,p_phone_number);
 
-  INSERT INTO crm_email (crm_account_id,email_address) VALUES (crm_account_id,p_email_address);
+  INSERT INTO crm_email (crm_account_id,email_address) VALUES (accountId,p_email_address);
 
-  SELECT crm_account_id;
+  SELECT accountId;
 
-END;
+END
+
+$$
+
