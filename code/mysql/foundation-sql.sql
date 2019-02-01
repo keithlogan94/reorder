@@ -32,7 +32,55 @@ $$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_account_by;
+
+DELIMITER $$
+
+CREATE PROCEDURE get_account_by
+  (
+  p_by ENUM('email','accountId'),
+  p_data VARCHAR(250)
+)
+
+BEGIN
+
+  IF (p_by = 'email') THEN
+
+    #get account by email
+    SELECT * FROM crm_account a
+    INNER JOIN crm_person cp on a.crm_account_id = cp.crm_account_id
+    INNER JOIN crm_email ce on a.crm_account_id = ce.crm_account_id
+      WHERE ce.email_address = p_data AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+      LIMIT 1
+    ;
+
+  ELSEIF (p_by = 'accountId') THEN
+
+    #get account by account id
+    SELECT * FROM crm_account a
+                    INNER JOIN crm_person cp on a.crm_account_id = cp.crm_account_id
+                    INNER JOIN crm_email ce on a.crm_account_id = ce.crm_account_id
+    WHERE ce.crm_account_id = CAST(p_data AS UNSIGNED) AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+      LIMIT 1
+    ;
+  END IF;
+
+END $$
+
+
+DELIMITER ;
 
 
 
 
+
+
+# CALL insert_crm_account('Keith','Becker','Logan','keithloganbecker94@gmail.com','8082258615','male',NULL);
+# CALL get_account_by('accountId','5');
+#
+#
+# SELECT * FROM crm_account a
+#                 INNER JOIN crm_person cp on a.crm_account_id = cp.crm_account_id
+#                 INNER JOIN crm_email ce on a.crm_account_id = ce.crm_account_id
+# WHERE ce.email_address = 'keithloganbecker94@gmail.com' AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+# ;

@@ -8,7 +8,7 @@
 
 namespace code\php;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Person.php';
 
 
 class AccountSignupManager
@@ -28,7 +28,7 @@ class AccountSignupManager
      * @param $zipCode
      * @param $state
      * @param $country
-     * @return bool|Account
+     * @return bool|Person
      * @throws \Exception
      */
     public function requestCreateAccount($accountType, $firstName, $lastName, $middleName, $email,
@@ -82,7 +82,7 @@ class AccountSignupManager
      * @param $zipCode
      * @param $state
      * @param $country
-     * @return Account
+     * @return Person
      * @throws \Exception
      */
     private function createAccount($accountType, $firstName, $lastName, $middleName, $email,
@@ -101,7 +101,7 @@ class AccountSignupManager
 
         if (!is_integer($accountId)) throw new \Exception('insert statement failed to return account id');
 
-        return new Account($accountId);
+        return new Person($accountId);
 
 
     }

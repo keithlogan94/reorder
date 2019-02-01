@@ -9,7 +9,7 @@
 namespace code\php;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Person.php';
 
 class LoginCredentials
 {
@@ -70,7 +70,7 @@ class LoginCredentials
     /**
      * @param $usernameOrEmail
      * @param $password
-     * @return bool|Account
+     * @return bool|Person
      * @throws \Exception
      */
     public function processLogin($usernameOrEmail, $password)
@@ -108,7 +108,7 @@ class LoginCredentials
         $_SESSION['loggedin_email'] = $this->email;
         $_SESSION['loggedin_time'] = date('Y-m-d H:i:s');
 
-        $account =  new Account((int)$this->accountId);
+        $account =  new Person((int)$this->accountId);
         $account->setLoginCredentials($this);
         return $account;
 

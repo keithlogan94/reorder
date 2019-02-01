@@ -7,12 +7,12 @@
  */
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/AccountSignupManager.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Account.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Person.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/LoginCredentials.php';
 use code\php\Database;
 use code\php\AccountSignupManager;
-use code\php\Account;
+use code\php\Person;
 use code\php\LoginCredentials;
 
 session_start();
@@ -92,8 +92,8 @@ if ($account->getFirstName() !== $fname
         'do not match');
 }
 
-$account = new \code\php\Account('keithloganbecker94@gmail.com');
-$account2 = new Account($account->getCrmAccountId());
+$account = new \code\php\Person('keithloganbecker94@gmail.com');
+$account2 = new Person($account->getCrmAccountId());
 
 if ($account->getStreet1() !== $account2->getStreet1() || $account->getFirstName() !== $account2->getFirstName()) {
     throw new Exception('unit test failed (loadByEmail): failed to load info correctly');

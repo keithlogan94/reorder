@@ -6,7 +6,7 @@ namespace code\php;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 
 
-class Account
+class Person
 {
 
     private $crm_account_id;
@@ -16,29 +16,7 @@ class Account
     private $middle_name;
     private $email_address;
     private $phone_number;
-    private $street1;
-    private $street2;
-    private $city;
-    private $state;
-    private $zip_code;
-    private $country;
     private $loginCredentials;
-
-    /**
-     * @return mixed
-     */
-    public function getLoginCredentials()
-    {
-        return $this->loginCredentials;
-    }
-
-    /**
-     * @param mixed $loginCredentials
-     */
-    public function setLoginCredentials($loginCredentials)
-    {
-        $this->loginCredentials = $loginCredentials;
-    }
 
     /**
      * Account constructor.
@@ -56,6 +34,22 @@ class Account
         } else if (is_string($accountIdOrEmail)) {
             $this->loadByEmail($accountIdOrEmail);
         }
+    }
+
+    /**
+     * @param mixed $loginCredentials
+     */
+    public function setLoginCredentials($loginCredentials)
+    {
+        $this->loginCredentials = $loginCredentials;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoginCredentials()
+    {
+        return $this->loginCredentials;
     }
 
     /**
