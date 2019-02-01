@@ -8,15 +8,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 
 class Person
 {
-
-    private $crm_account_id;
-    private $account_type;
-    private $first_name;
-    private $last_name;
-    private $middle_name;
-    private $email_address;
-    private $phone_number;
-    private $loginCredentials;
+    private $accountId;
+    private $firstName;
+    private $lastName;
+    private $middleName;
+    private $birthday;
+    private $gender;
+    private $phoneNumber;
+    private $emailAddress;
+    private $verified;
+    private $accountCreationDateTime;
 
     /**
      * Account constructor.
@@ -29,27 +30,10 @@ class Person
             throw new \Exception('$accountId must be numeric.');
         }
         if (is_integer($accountIdOrEmail)) {
-            $this->crm_account_id = $accountIdOrEmail;
             $this->loadByAccountId($accountIdOrEmail);
         } else if (is_string($accountIdOrEmail)) {
             $this->loadByEmail($accountIdOrEmail);
         }
-    }
-
-    /**
-     * @param mixed $loginCredentials
-     */
-    public function setLoginCredentials($loginCredentials)
-    {
-        $this->loginCredentials = $loginCredentials;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLoginCredentials()
-    {
-        return $this->loginCredentials;
     }
 
     /**
@@ -77,70 +61,72 @@ class Person
     {
         /* @var $db Database */
         $db = get_db();
-        $loadData = $db->callStoredProcedure('find_crm_account_by_crm_account_id',
-            [$accountId],
-            'i');
-        foreach ($loadData[0] as $key => $val) {
-            $this->{$key} = $val;
-        }
-    }
+        $loadData = $db->callStoredProcedure('get_account_by',
+            ['accountId',$accountId],
+            'ss');
 
-    /**
-     * @return int
-     */
-    public function getCrmAccountId()
-    {
-        return $this->crm_account_id;
+        $this->accountId = $loadData[0]['crm_account_id'];
+        $this->firstName = $loadData[0]['first_name'];
+        $this->lastName = $loadData[0]['last_name'];
+        $this->middleName = $loadData[0]['middle_name'];
+        $this->birthday = $loadData[0]['birthday'];
+        $this->gender = $loadData[0]['gender'];
+        $this->phoneNumber = $loadData[0]['phone_number'];
+        $this->emailAddress = $loadData[0]['email_address'];
+        $this->verified = $loadData[0]['verified'] == 0 ? false : true;
+        $this->accountCreationDateTime = $loadData[0]['account_creation_datetime'];
     }
 
     private function loadByEmail($accountIdOrEmail)
     {
         /* @var $db Database */
         $db = get_db();
-        $loadData = $db->callStoredProcedure('find_crm_account_by_email',
-            [$accountIdOrEmail],
-            's');
-        foreach ($loadData[0] as $key => $val) {
-            $this->{$key} = $val;
-        }
+        $loadData = $db->callStoredProcedure('get_account_by',
+            ['email',$accountIdOrEmail],
+            'ss');
+
+        $this->accountId = $loadData[0]['crm_account_id'];
+        $this->firstName = $loadData[0]['first_name'];
+        $this->lastName = $loadData[0]['last_name'];
+        $this->middleName = $loadData[0]['middle_name'];
+        $this->birthday = $loadData[0]['birthday'];
+        $this->gender = $loadData[0]['gender'];
+        $this->phoneNumber = $loadData[0]['phone_number'];
+        $this->emailAddress = $loadData[0]['email_address'];
+        $this->verified = $loadData[0]['verified'] == 0 ? false : true;
+        $this->accountCreationDateTime = $loadData[0]['account_creation_datetime'];
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
 
-
-
+    /**
+     * @param mixed $accountId
+     */
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
+    }
 
     /**
      * @return mixed
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
-     * @param mixed $first_name
-     * @throws \Exception
+     * @param mixed $firstName
      */
-    public function setFirstName($first_name)
+    public function setFirstName($firstName)
     {
-        $this->first_name = $first_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountType()
-    {
-        return $this->account_type;
-    }
-
-    /**
-     * @param mixed $account_type
-     * @throws \Exception
-     */
-    public function setAccountType($account_type)
-    {
-        $this->account_type = $account_type;
+        $this->firstName = $firstName;
     }
 
     /**
@@ -148,16 +134,15 @@ class Person
      */
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
-     * @param mixed $last_name
-     * @throws \Exception
+     * @param mixed $lastName
      */
-    public function setLastName($last_name)
+    public function setLastName($lastName)
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastName;
     }
 
     /**
@@ -165,33 +150,47 @@ class Person
      */
     public function getMiddleName()
     {
-        return $this->middle_name;
+        return $this->middleName;
     }
 
     /**
-     * @param mixed $middle_name
-     * @throws \Exception
+     * @param mixed $middleName
      */
-    public function setMiddleName($middle_name)
+    public function setMiddleName($middleName)
     {
-        $this->middle_name = $middle_name;
+        $this->middleName = $middleName;
     }
 
     /**
      * @return mixed
      */
-    public function getEmailAddress()
+    public function getBirthday()
     {
-        return $this->email_address;
+        return $this->birthday;
     }
 
     /**
-     * @param mixed $email_address
-     * @throws \Exception
+     * @param mixed $birthday
      */
-    public function setEmailAddress($email_address)
+    public function setBirthday($birthday)
     {
-        $this->email_address = $email_address;
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param mixed $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 
     /**
@@ -199,118 +198,63 @@ class Person
      */
     public function getPhoneNumber()
     {
-        return $this->phone_number;
+        return $this->phoneNumber;
     }
 
     /**
-     * @param mixed $phone_number
-     * @throws \Exception
+     * @param mixed $phoneNumber
      */
-    public function setPhoneNumber($phone_number)
+    public function setPhoneNumber($phoneNumber)
     {
-        $this->phone_number = $phone_number;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStreet1()
-    {
-        return $this->street1;
-    }
-
-    /**
-     * @param mixed $street1
-     * @throws \Exception
-     */
-    public function setStreet1($street1)
-    {
-        $this->street1 = $street1;
+        $this->phoneNumber = $phoneNumber;
     }
 
     /**
      * @return mixed
      */
-    public function getStreet2()
+    public function getEmailAddress()
     {
-        return $this->street2;
+        return $this->emailAddress;
     }
 
     /**
-     * @param mixed $street2
-     * @throws \Exception
+     * @param mixed $emailAddress
      */
-    public function setStreet2($street2)
+    public function setEmailAddress($emailAddress)
     {
-        $this->street2 = $street2;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param mixed $city
-     * @throws \Exception
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
+        $this->emailAddress = $emailAddress;
     }
 
     /**
      * @return mixed
      */
-    public function getState()
+    public function getVerified()
     {
-        return $this->state;
+        return $this->verified;
     }
 
     /**
-     * @param mixed $state
-     * @throws \Exception
+     * @param mixed $verified
      */
-    public function setState($state)
+    public function setVerified($verified)
     {
-        $this->state = $state;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getZipCode()
-    {
-        return $this->zip_code;
-    }
-
-    /**
-     * @param mixed $zip_code
-     * @throws \Exception
-     */
-    public function setZipCode($zip_code)
-    {
-        $this->zip_code = $zip_code;
+        $this->verified = $verified;
     }
 
     /**
      * @return mixed
      */
-    public function getCountry()
+    public function getAccountCreationDateTime()
     {
-        return $this->country;
+        return $this->accountCreationDateTime;
     }
 
     /**
-     * @param mixed $country
-     * @throws \Exception
+     * @param mixed $accountCreationDateTime
      */
-    public function setCountry($country)
+    public function setAccountCreationDateTime($accountCreationDateTime)
     {
-        $this->country = $country;
+        $this->accountCreationDateTime = $accountCreationDateTime;
     }
 
 }
