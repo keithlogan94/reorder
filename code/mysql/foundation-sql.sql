@@ -17,7 +17,7 @@ BEGIN
   INSERT INTO crm_account (add_time)
   VALUES (NOW());
 
-  SET crm_account_id = (SELECT LAST_INSERT_ID());
+  SET accountId = (SELECT LAST_INSERT_ID());
 
   INSERT INTO crm_person (crm_account_id,first_name,last_name,middle_name,birthday,gender,phone_number)
   VALUES (accountId,p_first_name,p_last_name,p_middle_name,p_birthday,p_gender,p_phone_number);
