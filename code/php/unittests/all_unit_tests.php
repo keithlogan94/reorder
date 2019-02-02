@@ -85,6 +85,21 @@ class UnitTests {
         }
     }
 
+    public function test_create_account()
+    {
+        $rand = rand(0,100010101);
+        $email = 'testaccount'.$rand.'@test.com';
+        if (Person::canCreateAccount($email)) {
+            $acc = Person::requestCreateAccount('TestFirstName','TestLastName','TestMiddleName',$email,NULL,'male',NULL);
+            if (!($acc instanceof Person)) {
+                throw new \Exception('unit test failed('.__METHOD__.') failed to return account object');
+            }
+            if (!Person::doesAccountExist($email)) {
+                throw new \Exception('unit test failed('.__METHOD__.') account should exist after creation');
+            }
+        }
+    }
+
 }
 
 

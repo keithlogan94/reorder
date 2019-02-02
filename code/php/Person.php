@@ -48,7 +48,7 @@ class Person
      * @return bool|Person
      * @throws \Exception
      */
-    private static function requestCreateAccount($firstName, $lastName, $middleName, $email,
+    public static function requestCreateAccount($firstName, $lastName, $middleName, $email,
                                           $phoneNumber, $gender, $birthday)
     {
         if (self::canCreateAccount($email)) {
