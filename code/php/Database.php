@@ -14,7 +14,7 @@ class Database
 
     const DB_NAME = 'reorder';
     const DB_PASS = 'c4hahaven%jkb72rAs';
-    const DB_USER = 'root';
+    const DB_USER = 'reorder_db';
     const DB_HOST = 'localhost';
 
     private $link = null;
