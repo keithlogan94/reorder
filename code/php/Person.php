@@ -137,6 +137,8 @@ class Person
             ['email',$accountIdOrEmail],
             'ss');
 
+        if (is_bool($loadData)) throw new \Exception('load data should not be bool');
+
         $this->accountId = $loadData[0]['crm_account_id'];
         $this->firstName = $loadData[0]['first_name'];
         $this->lastName = $loadData[0]['last_name'];
