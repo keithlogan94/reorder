@@ -8,7 +8,6 @@
 
 namespace code\php;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/AccountSignupManager.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/LoginCredentials.php';
 
 

@@ -6,12 +6,10 @@
  * Time: 9:27 AM
  */
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/AccountSignupManager.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Person.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Database.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/LoginCredentials.php';
 use code\php\Database;
-use code\php\AccountSignupManager;
 use code\php\Person;
 use code\php\LoginCredentials;
 
