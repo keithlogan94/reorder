@@ -353,5 +353,56 @@ end $$
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS upsert_login_credentials;
+
+
+DELIMITER $$
+
+
+CREATE PROCEDURE upsert_login_credentials (
+p_crm_account_id INT(11),
+p_email VARCHAR(250),
+p_password VARCHAR(250)
+)
+BEGIN
+
+  IF EXISTS (SELECT * FROM crm_login_credentials WHERE crm_account_id = p_crm_account_id) THEN
+
+    UPDATE crm_login_credentials
+    SET
+        username = p_email,
+        password = p_password
+    WHERE crm_account_id = p_crm_account_id
+    ;
+
+    ELSE
+
+    INSERT INTO crm_login_credentials (crm_account_id, username, password)
+    VALUES (p_crm_account_id, p_email, p_password)
+    ;
+
+  end if;
+
+end $$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_login_credentials;
+
+DELIMITER $$
+
+CREATE PROCEDURE get_login_credentials (
+p_email VARCHAR(250),
+p_password VARCHAR(100)
+)
+BEGIN
+
+  SELECT
+         c.crm_account_id,c.username,c.password
+  FROM crm_login_credentials c WHERE username = p_email AND password = p_password;
+
+end $$
+
+DELIMITER ;
 
 
