@@ -9,10 +9,12 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/unittests/all_unit_tests.php';
 
-
 $class = new \unittests\UnitTests();
 $methods = get_class_methods($class);
 
 foreach ($methods as $method) {
+    echo 'Running ' . $method . '...';
     $class->{$method}();
+    echo 'Passed<BR>';
 }
+

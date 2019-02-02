@@ -68,7 +68,7 @@ class Person
      * @return bool
      * @throws \Exception
      */
-    private static function doesAccountExist($email)
+    public static function doesAccountExist($email)
     {
         if (!strpos($email,'@')) throw new \Exception('improperly formtted email');
         /* @var $db Database*/
@@ -84,7 +84,7 @@ class Person
      * @return bool
      * @throws \Exception
      */
-    private static function canCreateAccount($email)
+    public static function canCreateAccount($email)
     {
         return self::doesAccountExist($email) === false;
     }
