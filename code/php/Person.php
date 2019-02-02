@@ -76,6 +76,7 @@ class Person
         $loadData = $db->callStoredProcedure('get_account_by',
             ['email',$email],
             'ss');
+        if (is_bool($loadData) || !is_array($loadData)) throw new \Exception('doesAccountExist() $loadData should be array');
         return count($loadData) > 0;
     }
 

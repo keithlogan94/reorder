@@ -67,6 +67,21 @@ class UnitTests {
         $res = mysqli_query($db->getConnection(), 'SELECT * FROM crm_account a INNER JOIN crm_email e ON a.crm_account_id = e.crm_account_id WHERE e.email_address = \'keithloganbecker94@gmail.com\'');
         if (mysqli_num_rows($res) === 0) throw new \Exception('test assertion failed: must have account keithloganbecker94@gmail.com saved to test this unit test');
 
+        $res = mysqli_query($db->getConnection(), 'SELECT * FROM crm_email');
+        $emails = [];
+        while ($row = mysqli_fetch_assoc($res)) {
+            $emails[] = $row['email_address'];
+        }
+        for ($i = 0; $i < count($emails); $i++) {
+            if (!Person::doesAccountExist($emails[$i])) {
+                throw new \Exception('doesAccountExist failed to find account('.$emails[$i].')');
+            }
+        }
+        for ($i = 0; $i < count($emails); $i++) {
+            if (Person::doesAccountExist($emails[$i].'isdfsd')) {
+                throw new \Exception('doesAccountExist should not have found account ('.$emails[$i].'isdfsd'.')');
+            }
+        }
         if (!Person::doesAccountExist('keithloganbecker94@gmail.com'))
             throw new \Exception('unit test failed('.__METHOD__.'): account should exist');
 
