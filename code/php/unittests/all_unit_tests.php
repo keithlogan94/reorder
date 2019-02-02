@@ -95,7 +95,7 @@ class UnitTests {
                 throw new \Exception('unit test failed('.__METHOD__.') failed to return account object');
             }
             if (!Person::doesAccountExist($email)) {
-                throw new \Exception('unit test failed('.__METHOD__.') account should exist after creation');
+                throw new \Exception('unit test failed('.__METHOD__.') account should exist after creation --> ' . $email);
             }
         }
     }
