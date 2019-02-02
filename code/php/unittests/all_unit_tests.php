@@ -29,11 +29,21 @@ class UnitTests {
         $db = new Database();
     }
 
+    public function create_test_data_if_not_exists()
+    {
+        /* @var $db Database*/
+        $db = get_db();
+        $conn = $db->getConnection();
+        $res = mysqli_query($conn, 'SELECT * FROM crm_account a INNER JOIN crm_email e ON a.crm_account_id = e.crm_account_id WHERE e.email_address = \'keithloganbecker94@gmail.com\'');
+        if (mysqli_num_rows($res) === 0) {
+            mysqli_query($conn, "CALL insert_crm_account('Keith','Becker','Logan','keithloganbecker94@gmail.com',NULL,'male',NULL);");
+        }
+    }
+
     public function test_call_stored_procedure()
     {
         /* @var $db Database*/
         $db = get_db();
-
         $conn = $db->getConnection();
         $res = mysqli_query($conn, 'SELECT * FROM crm_account a INNER JOIN crm_email e ON a.crm_account_id = e.crm_account_id WHERE e.email_address = \'keithloganbecker94@gmail.com\'');
         if (mysqli_num_rows($res) === 0) exit('failed to find account with email keithloganbecker94@gmail.com; please insert this account to run this unit test');
