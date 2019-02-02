@@ -128,58 +128,6 @@ END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS insert_crm_address;
-
-
-DELIMITER $$
-
-CREATE PROCEDURE insert_crm_address
-  (
-  p_crm_account_id INT(11),
-  p_address_line1 VARCHAR(200),
-  p_address_line2 VARCHAR(200),
-  p_city VARCHAR(100),
-  p_state VARCHAR(100),
-  p_zip VARCHAR(100),
-  p_country VARCHAR(10),
-  p_is_billing BOOLEAN,
-  p_billing_first_name VARCHAR(40),
-  p_billing_last_name VARCHAR(40),
-  p_is_shipping BOOLEAN,
-  p_shipping_first_name VARCHAR(40),
-  p_shipping_last_name VARCHAR(40)
-)
-BEGIN
-
-
-    INSERT INTO crm_address (crm_account_id, street1, street2, city, state, zip, country, billing_first_name,
-                             billing_last_name,is_billing, shipping_first_name, shipping_last_name, is_shipping)
-    VALUES
-    (
-      p_crm_account_id,
-      p_address_line1,
-      p_address_line2,
-      p_city,
-      p_state,
-      p_zip,
-      p_country,
-      p_billing_first_name,
-      p_billing_last_name,
-      p_is_billing,
-      p_shipping_first_name,
-      p_shipping_last_name,
-      p_is_shipping
-    );
-
-    SELECT LAST_INSERT_ID() AS 'last_insert_id';
-
-end $$
-
-DELIMITER ;
-
-
-
-
 DROP PROCEDURE IF EXISTS upsert_crm_address;
 
 
@@ -320,20 +268,4 @@ BEGIN
 end $$
 
 DELIMITER ;
-
-
-
-
-# CALL upsert_crm_address(4,'4240 Swanson Way',NULL,'Castle Rock','CO','80109','US',TRUE,'Keith','Becker',TRUE,'Keith','Becker');
-# SELECT * FROM crm_address;
-
-
-
-
-
-
-
-
-
-
 
