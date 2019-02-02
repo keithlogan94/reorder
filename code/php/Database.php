@@ -26,6 +26,11 @@ class Database
 
     private $numRowsReturned = null;
 
+    public function getConnection()
+    {
+        return $this->link;
+    }
+
     /**
      * Database constructor.
      * @throws \Exception

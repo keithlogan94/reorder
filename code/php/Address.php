@@ -12,4 +12,9 @@ namespace code\php;
 class Address
 {
 
+    public function __construct()
+    {
+    }
+
+
 }

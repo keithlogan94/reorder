@@ -21,7 +21,7 @@ class Person
 
     /**
      * Account constructor.
-     * @param $accountId
+     * @param $accountIdOrEmail
      * @throws \Exception
      */
     public function __construct($accountIdOrEmail)
@@ -32,8 +32,61 @@ class Person
         if (is_integer($accountIdOrEmail)) {
             $this->loadByAccountId($accountIdOrEmail);
         } else if (is_string($accountIdOrEmail)) {
+            if (!strpos($accountIdOrEmail, '@')) throw new \Exception('email address must have @ character');
             $this->loadByEmail($accountIdOrEmail);
         }
+    }
+
+    /**
+     * @param $firstName
+     * @param $lastName
+     * @param $middleName
+     * @param $email
+     * @param $phoneNumber
+     * @param $gender
+     * @param $birthday
+     * @return bool|Person
+     * @throws \Exception
+     */
+    private static function requestCreateAccount($firstName, $lastName, $middleName, $email,
+                                          $phoneNumber, $gender, $birthday)
+    {
+        if (self::canCreateAccount($email)) {
+            /* @var $db Database */
+            $db = get_db();
+            $result = $db->callStoredProcedure('insert_crm_account',
+                [$firstName,$lastName,$middleName,$email,$phoneNumber,$gender,$birthday],
+                'sssssss');
+            return new Person($email);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $email
+     * @return bool
+     * @throws \Exception
+     */
+    private static function doesAccountExist($email)
+    {
+        if (!strpos($email,'@')) throw new \Exception('improperly formtted email');
+        /* @var $db Database*/
+        $db = get_db();
+        $loadData = $db->callStoredProcedure('get_account_by',
+            ['email',$email],
+            'ss');
+        return count($loadData) > 0;
+    }
+
+    /**
+     * @param $email
+     * @return bool
+     * @throws \Exception
+     */
+    private static function canCreateAccount($email)
+    {
+        return self::doesAccountExist($email) === false;
     }
 
     /**
