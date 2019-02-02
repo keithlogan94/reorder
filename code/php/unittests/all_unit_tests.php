@@ -70,7 +70,19 @@ class UnitTests {
         if (!Person::doesAccountExist('keithloganbecker94@gmail.com'))
             throw new \Exception('unit test failed('.__METHOD__.'): account should exist');
 
+        if (Person::doesAccountExist('asldkfjalskdfjlaksjdf@alskdjfalsdkfj.com')) throw new \Exception('unit test failed('.__METHOD__.') account should not exist');
 
+    }
+
+    public function test_can_create_account()
+    {
+        if (Person::doesAccountExist('keithloganbecker94@gmail.com') && Person::canCreateAccount('keithloganbecker94@gmail.com')) {
+            throw new \Exception('unit test failed ('. __METHOD__. ') should not be able to create account');
+        }
+
+        if (!Person::canCreateAccount('alkdsjflaksjdflaksdjflakjsdflkj@alsdkfjalskdjf.com')) {
+            throw new \Exception('unit test failed ('.__METHOD__.') should be able to create account');
+        }
     }
 
 }
