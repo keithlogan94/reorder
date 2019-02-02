@@ -10,9 +10,8 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/unittests/all_unit_tests.php';
 
 
-$methods = get_class_methods('UnitTests');
-
 $class = new \unittests\UnitTests();
+$methods = get_class_methods($class);
 
 foreach ($methods as $method) {
     $class->{$method}();
