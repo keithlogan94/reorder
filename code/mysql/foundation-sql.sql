@@ -529,3 +529,82 @@ end $$
 
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS upsert_retailer_login;
+
+
+DELIMITER $$
+
+
+CREATE PROCEDURE upsert_retailer_login (
+p_crm_account_id INT(11),
+p_retailer ENUM('amazon','walmart'),
+p_email VARCHAR(250),
+p_password VARCHAR(100)
+)
+BEGIN
+
+  IF NOT EXISTS (SELECT * FROM sec_retailer_login WHERE crm_account_id = p_crm_account_id AND retailer = p_retailer) THEN
+
+    INSERT INTO sec_retailer_login (retailer, crm_account_id, login_email, login_password)
+    VALUES (p_retailer,p_crm_account_id,p_email,p_password);
+
+    ELSE
+
+    UPDATE sec_retailer_login
+      SET
+          login_email = p_email,
+          login_password = p_password
+    WHERE crm_account_id = p_crm_account_id AND retailer = p_retailer
+    ;
+
+  end if;
+
+end $$
+
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS get_retailer_login_by;
+
+
+DELIMITER $$
+
+
+CREATE PROCEDURE get_retailer_login_by (
+p_get_by ENUM('accountId','email'),
+p_data VARCHAR(250),
+p_retailer ENUM('amazon','walmart')
+)
+BEGIN
+
+  IF (p_get_by = 'accountId') THEN
+
+    SELECT
+      l.crm_account_id,l.retailer,l.login_email,l.login_password
+    FROM sec_retailer_login l
+    WHERE crm_account_id = CAST(p_data AS UNSIGNED)
+      AND l.retailer = p_retailer
+    ;
+
+  ELSEIF (p_get_by = 'email') THEN
+
+    SELECT
+           l.crm_account_id,l.retailer,l.login_email,l.login_password
+    FROM sec_retailer_login l
+    INNER JOIN crm_account a ON l.crm_account_id = a.crm_account_id
+    INNER JOIN crm_email e ON a.crm_account_id = e.crm_account_id AND e.start_date < NOW() AND
+                              (e.end_date > NOW() OR e.end_date IS NULL)
+    WHERE e.email_address = p_data
+      AND l.retailer = p_retailer
+    ;
+
+  end if;
+
+end $$
+
+
+DELIMITER ;
+
+
