@@ -443,4 +443,89 @@ end $$
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS upsert_credit_card;
+
+
+DELIMITER $$
+
+
+CREATE PROCEDURE upsert_credit_card (
+p_crm_account_id INT(11),
+p_name_on_card VARCHAR(150),
+p_number VARCHAR(30),
+p_security_code VARCHAR(10),
+p_expiration_month TINYINT,
+p_expiration_year SMALLINT
+)
+BEGIN
+
+  IF EXISTS (SELECT * FROM fin_credit_card WHERE start_date < NOW() AND (end_date > NOW() OR end_date IS NULL)
+                                             AND crm_account_id = p_crm_account_id) THEN
+    #credit card does exist already for this account
+    UPDATE fin_credit_card
+    SET end_date = NOW()
+    WHERE crm_account_id = p_crm_account_id
+      AND end_date IS NULL
+      ;
+
+    INSERT INTO fin_credit_card (crm_account_id, name_on_card, number, security_code, expiration_month, expiration_year)
+    VALUES
+    (p_crm_account_id, p_name_on_card,p_number,p_security_code,p_expiration_month,p_expiration_year)
+    ;
+
+    ELSE
+    #credit card does not exist yet for this account
+
+      INSERT INTO fin_credit_card (crm_account_id, name_on_card, number, security_code, expiration_month, expiration_year)
+      VALUES
+      (p_crm_account_id, p_name_on_card,p_number,p_security_code,p_expiration_month,p_expiration_year)
+      ;
+
+  end if;
+
+end $$
+
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS get_credit_card_by;
+
+
+DELIMITER $$
+
+
+CREATE PROCEDURE get_credit_card_by (
+p_get_by ENUM('accountId','email'),
+p_data VARCHAR(250)
+)
+BEGIN
+
+  IF (p_get_by = 'accountId') THEN
+
+    SELECT
+      c.crm_account_id,c.name_on_card,c.number,c.security_code,c.expiration_month,c.expiration_year,c.start_date
+    FROM fin_credit_card c
+    WHERE crm_account_id = CAST(p_data AS UNSIGNED)
+      AND start_date < NOW() AND (end_date > NOW() OR end_date IS NULL)
+    ;
+
+    ELSEIF (p_get_by = 'email') THEN
+
+      SELECT
+        c.crm_account_id,c.name_on_card,c.number,c.security_code,c.expiration_month,c.expiration_year,c.start_date
+      FROM fin_credit_card c
+      INNER JOIN crm_email e ON c.crm_account_id = e.crm_account_id AND e.start_date < NOW() AND
+                                (e.end_date > NOW() OR e.end_date IS NULL)
+      WHERE e.email_address = p_data
+        AND c.start_date < NOW() AND (c.end_date > NOW() OR c.end_date IS NULL)
+      ;
+
+  end if;
+
+
+end $$
+
+
+DELIMITER ;
 
