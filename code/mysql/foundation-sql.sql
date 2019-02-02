@@ -405,4 +405,42 @@ end $$
 
 DELIMITER ;
 
+SHOW TABLES;
+
+DROP PROCEDURE IF EXISTS get_config_by;
+
+DELIMITER $$
+
+
+CREATE PROCEDURE get_config_by (
+p_get_by ENUM('config_key','description'),
+p_data VARCHAR(50)
+)
+BEGIN
+
+  IF (p_get_by = 'config_key') THEN
+
+
+    SELECT
+           s.config_key,s.description,s.value
+    FROM sys_config s WHERE config_key = p_data;
+
+
+    ELSEIF (p_get_by = 'description') THEN
+
+
+    SELECT
+      s.config_key,s.description,s.value
+    FROM sys_config s WHERE description = p_data
+    ;
+
+  end if;
+
+
+end $$
+
+
+DELIMITER ;
+
+
 
