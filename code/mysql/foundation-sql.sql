@@ -269,3 +269,89 @@ end $$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_address_by;
+
+DELIMITER $$
+
+
+CREATE PROCEDURE get_address_by (
+p_get_by ENUM('email','accountId'),
+p_which ENUM('primary','billing','shipping'),
+p_data VARCHAR(250)
+)
+BEGIN
+
+  IF (p_get_by = 'email') THEN
+
+    IF (p_which = 'primary') THEN
+
+      SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country FROM crm_address a
+        INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+        INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+      WHERE ce.email_address = p_data AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+        AND a.is_shipping = FALSE AND a.is_billing = FALSE
+      ;
+
+      ELSEIF (p_which = 'shipping') THEN
+
+        SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country,a.shipping_first_name,a.shipping_last_name
+        FROM crm_address a
+          INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+          INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+        WHERE ce.email_address = p_data AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+          AND a.is_shipping = TRUE
+        ;
+
+      ELSEIF (p_which = 'billing') THEN
+
+        SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country,a.billing_first_name,a.billing_last_name
+        FROM crm_address a
+               INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+               INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+        WHERE ce.email_address = p_data AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+          AND a.is_billing = TRUE
+        ;
+
+    end if;
+
+    ELSEIF (p_get_by = 'accountId') THEN
+
+      IF (p_which = 'primary') THEN
+
+        SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country FROM crm_address a
+          INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+          INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+        WHERE ce.crm_account_id = CAST(p_data AS UNSIGNED) AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+          AND a.is_shipping = FALSE AND a.is_billing = FALSE
+        ;
+
+      ELSEIF (p_which = 'shipping') THEN
+
+        SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country,a.shipping_first_name,a.shipping_last_name
+        FROM crm_address a
+          INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+          INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+        WHERE ce.crm_account_id = CAST(p_data AS UNSIGNED) AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+          AND a.is_shipping = TRUE
+        ;
+
+      ELSEIF (p_which = 'billing') THEN
+
+        SELECT a.crm_account_id,a.street1,a.street2,a.city,a.state,a.zip,a.country,a.billing_first_name,a.billing_last_name
+        FROM crm_address a
+          INNER JOIN crm_account ca on a.crm_account_id = ca.crm_account_id
+          INNER JOIN crm_email ce on ca.crm_account_id = ce.crm_account_id
+        WHERE ce.crm_account_id = CAST(p_data AS UNSIGNED) AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
+          AND a.is_billing = TRUE
+        ;
+
+  end if;
+    END IF;
+
+end $$
+
+DELIMITER ;
+
+
+
+
