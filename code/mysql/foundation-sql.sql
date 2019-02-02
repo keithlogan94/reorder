@@ -126,35 +126,3 @@ END $$
 
 
 DELIMITER ;
-
-CALL update_crm_account(
-    'logan',
-    'becker',
-    'keith',
-    'testemail@test.com',
-    'lkasjdflkj',
-    'male',
-    NULL,
-    4
-  );
-
-CALL get_account_by('accountId', 4);
-
-SELECT * FROM crm_email;
-
-
-# CALL get_account_by('accountId','5');
-
-
-
-# CALL insert_crm_account('Keith','Becker','Logan','keithloganbecker94@gmail.com','8082258615','male',NULL);
-# CALL get_account_by('accountId','5');
-#
-#
-# SELECT * FROM crm_account a
-#                 INNER JOIN crm_person cp on a.crm_account_id = cp.crm_account_id
-#                 INNER JOIN crm_email ce on a.crm_account_id = ce.crm_account_id
-# WHERE ce.email_address = 'keithloganbecker94@gmail.com' AND ce.start_date < NOW() AND (ce.end_date > NOW() OR ce.end_date IS NULL)
-# ;
-
-
