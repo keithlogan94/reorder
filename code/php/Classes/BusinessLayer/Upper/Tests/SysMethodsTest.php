@@ -14,8 +14,11 @@ class SysMethodsTest
 
     public function testValidHandleRequest()
     {
-        echo 'jtest';
-        throw new Exception('failed unit test');
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['apikey'] = 'ab4f1e8d-8de2-4bc4-9fbd-4868f61450f0';
+        $_POST['method'] = 'createAccount';
+        $_POST['className'] = 'AccountMethods';
+        SysMethods::handleRequest();
     }
 
     public function testInvalidHandleRequest()

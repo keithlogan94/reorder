@@ -115,9 +115,11 @@ if (isset($_GET['load_unit_tests'])) {
                             } catch (Exception $e) {
                                 echo '</div>';
                                 echo '<div style="color:red;font-size:30px;">Exception Was Thrown</div>';
+                                echo '<hr>';
                                 do {
                                     echo '<div style="color:red;">ExceptionMessage - '.$e->getMessage().' @ '.$e->getFile().':'.$e->getLine().'</div>';
                                     $e = $e->getPrevious();
+                                    echo '<hr>';
                                 } while ($e instanceof Exception);
                             }
                             ?>

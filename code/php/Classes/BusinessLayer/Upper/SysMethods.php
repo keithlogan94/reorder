@@ -16,6 +16,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/generated-conf/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/SysWrapper.php';
 use code\php\Classes\DataLayer\Upper\SysWrapper;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/AccountMethods.php';
+use code\php\Classes\BusinessLayer\Upper\AccountMethods;
 
 
 use Exception;
@@ -53,17 +55,17 @@ abstract class SysMethods
                 }
             }
 
+            //check if method exists in class and call it
             $class = $_POST['className'];
             $method = $_POST['method'];
+            $nsClass = 'code\php\Classes\BusinessLayer\Upper\\'.$class;
+            $classMethods = get_class_methods($nsClass);
 
-            if (!method_exists($class, $method)) {
-                throw new Exception('SysMethods::handleRequest() requested method does not exist in ' . $class.'object');
+            if (!in_array($method,$classMethods)) {
+                throw new Exception('SysMethods::handleRequest() requested method does not exist in ' . $class.' object');
             }
 
-            $res = $class::$method($_POST);
-
-            $response = json_encode($res);
-            echo $response;
+            $nsClass::$method($_POST);
 
         } catch (Exception $e) {
             throw new Exception('SysMethods::handleRequest() Failed to handle Request', 1, $e);
@@ -72,7 +74,7 @@ abstract class SysMethods
 
     public static function getConfig($params)
     {
-        if (!isset($params['key']) || !isset($params['description'])) {
+        if (!isset($params['key']) && !isset($params['description'])) {
             throw new Exception('SysMethods::getConfig() key or description must be set in params');
         }
          return SysWrapper::getConfig($params);

@@ -16,7 +16,7 @@ abstract class SysWrapper
 
     public static function getConfig($params)
     {
-        if (!isset($params['key']) || !isset($params['description'])) {
+        if (!isset($params['key']) && !isset($params['description'])) {
             throw new Exception('SysWrapper::getConfig() key or description must be set in params');
         }
         $configValue = null;
@@ -34,7 +34,7 @@ abstract class SysWrapper
                 }
                 break;
             case isset($params['description']):
-                $q = SysConfigQuery::create()->findOneByConfigKey($params['description']);
+                $q = SysConfigQuery::create()->findOneByDescription($params['description']);
                 if (is_null($q)) {
                     throw new Exception('SysWrapper::getConfig() config value failed to be found by description');
                 } else {
