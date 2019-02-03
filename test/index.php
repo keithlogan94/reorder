@@ -58,10 +58,11 @@ if (isset($_GET['load_unit_tests'])) {
     <div class="input-group mb-3">
         <input placeholder="Search For Any Unit Test File..." type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     </div>
+    <div style="display:inline-flex;flex-direction:row;">
     <?php
     foreach ($testFiles as $file) {
         ?>
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 18rem;margin-left:20px;">
             <div class="card-body">
                 <h5 class="card-title"><?= basename($file) ?></h5>
                 <p class="card-text"><?= $file ?></p>
@@ -74,6 +75,8 @@ if (isset($_GET['load_unit_tests'])) {
 
 
     ?>
+    </div>
+
     <hr>
 
     <?php
