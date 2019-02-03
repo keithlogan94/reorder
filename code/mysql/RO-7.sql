@@ -12,8 +12,4 @@ WHERE NOT EXISTS (
 LIMIT 1
 ;
 
-
-
-
-
-
+DESCRIBE crm_person;
