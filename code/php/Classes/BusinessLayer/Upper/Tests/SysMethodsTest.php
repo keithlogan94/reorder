@@ -12,10 +12,15 @@ use code\php\Classes\BusinessLayer\Upper\SysMethods;
 class SysMethodsTest
 {
 
-
     public function testValidHandleRequest()
     {
+        echo 'jtest';
+        throw new Exception('failed unit test');
+    }
 
+    public function testInvalidHandleRequest()
+    {
+        echo 'all good!';
     }
 
 
