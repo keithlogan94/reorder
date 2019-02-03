@@ -76,56 +76,66 @@ if (isset($_GET['load_unit_tests'])) {
     ?>
     <hr>
 
-    <div class="accordion" id="accordionExample">
+    <?php
+    $loadUnitTests = isset($_GET['load_unit_tests']);
 
-        <?php
-        $classPath = $_GET['load_unit_tests'];
-        require_once $classPath;
-        $file = basename($classPath);
-        $class = str_replace('.php','',$file);
-        $classMethods = get_class_methods($class);
-        $instance = new $class();
-        ?>
+    if ($loadUnitTests) {
+    ?>
+        <div class="accordion" id="accordionExample">
 
-        <?php
-
-        foreach ($classMethods as $method) {
+            <?php
+            $classPath = $_GET['load_unit_tests'];
+            require_once $classPath;
+            $file = basename($classPath);
+            $class = str_replace('.php','',$file);
+            $classMethods = get_class_methods($class);
+            $instance = new $class();
             ?>
-            <div class="card unit-test">
-                <div class="card-header" id="heading<?= $method ?>">
-                    <h2 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<?= $method ?>" aria   -expanded="true" aria-controls="collapse<?= $method ?>">
-                            <?= $method ?>
-                        </button>
-                    </h2>
-                </div>
 
-                <div id="collapse<?= $method ?>" class="collapse" aria-labelledby="heading<?= $method ?>" data-parent="#accordionExample">
-                    <div class="card-body">
-                        <?php
-                        try {
-                            echo '<div style="color:purple;font-weight:bold;">';
-                            $instance->{$method}();
-                            echo '</div>';
-                        } catch (Exception $e) {
-                            echo '</div>';
-                            echo '<div style="color:red;font-size:30px;">Exception Was Thrown</div>';
-                            do {
-                                echo '<div style="color:red;">ExceptionMessage - '.$e->getMessage().' @ '.$e->getFile().':'.$e->getLine().'</div>';
-                                $e = $e->getPrevious();
-                            } while ($e instanceof Exception);
-                        }
-                        ?>
+            <?php
+
+            foreach ($classMethods as $method) {
+                ?>
+                <div class="card unit-test">
+                    <div class="card-header" id="heading<?= $method ?>">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<?= $method ?>" aria   -expanded="true" aria-controls="collapse<?= $method ?>">
+                                <?= $method ?>
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapse<?= $method ?>" class="collapse" aria-labelledby="heading<?= $method ?>" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <?php
+                            try {
+                                echo '<div style="color:purple;font-weight:bold;">';
+                                $instance->{$method}();
+                                echo '</div>';
+                            } catch (Exception $e) {
+                                echo '</div>';
+                                echo '<div style="color:red;font-size:30px;">Exception Was Thrown</div>';
+                                do {
+                                    echo '<div style="color:red;">ExceptionMessage - '.$e->getMessage().' @ '.$e->getFile().':'.$e->getLine().'</div>';
+                                    $e = $e->getPrevious();
+                                } while ($e instanceof Exception);
+                            }
+                            ?>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        <?php
-        }
+                <?php
+            }
 
-        ?>
+            ?>
 
-    </div>
+        </div>
+    <?php
+    }
+    ?>
+
+
     <div style="height:400px;"></div>
 
 </div>

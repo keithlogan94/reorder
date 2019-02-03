@@ -1,0 +1,8 @@
+{
+    "propel": {
+        "paths": {
+            "schemaDir": "C:\\Apache24\\htdocs",
+            "phpDir": "C:\\Apache24\\htdocs\\models"
+        }
+    }
+}

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="crm_account" idMethod="native" phpName="CrmAccount">
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="add_time" phpName="AddTime" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="crm_address" idMethod="native" phpName="CrmAddress">
+    <column name="crm_address_id" phpName="CrmAddressId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="street1" phpName="Street1" type="VARCHAR" size="200" required="true"/>
+    <column name="street2" phpName="Street2" type="VARCHAR" size="200"/>
+    <column name="city" phpName="City" type="VARCHAR" size="100" required="true"/>
+    <column name="state" phpName="State" type="VARCHAR" size="10" required="true"/>
+    <column name="zip" phpName="Zip" type="VARCHAR" size="10"/>
+    <column name="country" phpName="Country" type="VARCHAR" size="10" required="true"/>
+    <column name="is_billing" phpName="IsBilling" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="billing_first_name" phpName="BillingFirstName" type="VARCHAR" size="40"/>
+    <column name="billing_last_name" phpName="BillingLastName" type="VARCHAR" size="40"/>
+    <column name="is_shipping" phpName="IsShipping" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="shipping_first_name" phpName="ShippingFirstName" type="VARCHAR" size="40"/>
+    <column name="shipping_last_name" phpName="ShippingLastName" type="VARCHAR" size="40"/>
+    <column name="start_date" phpName="StartDate" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="end_date" phpName="EndDate" type="TIMESTAMP"/>
+    <foreign-key foreignTable="crm_account" name="crm_address_ibfk_1">
+      <reference local="crm_account_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="crm_account" name="crm_address_ibfk_2">
+      <reference local="crm_address_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <index name="crm_account_id">
+      <index-column name="crm_account_id"/>
+    </index>
+    <index name="is_billing">
+      <index-column name="is_billing"/>
+    </index>
+    <index name="is_shipping">
+      <index-column name="is_shipping"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="crm_email" idMethod="native" phpName="CrmEmail">
+    <column name="crm_email_id" phpName="CrmEmailId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="email_address" phpName="EmailAddress" type="VARCHAR" size="250" required="true"/>
+    <column name="verified" phpName="Verified" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="start_date" phpName="StartDate" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="end_date" phpName="EndDate" type="TIMESTAMP"/>
+    <foreign-key foreignTable="crm_account" name="crm_email_ibfk_1">
+      <reference local="crm_account_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <index name="crm_account_id">
+      <index-column name="crm_account_id"/>
+    </index>
+    <index name="email_address">
+      <index-column name="email_address"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="crm_login_credentials" idMethod="native" phpName="CrmLoginCredentials">
+    <column name="crm_login_credentials_id" phpName="CrmLoginCredentialsId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="username" phpName="Username" type="VARCHAR" size="100"/>
+    <column name="password" phpName="Password" type="VARCHAR" size="100" required="true"/>
+    <column name="add_time" phpName="AddTime" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <unique name="crm_account_id">
+      <unique-column name="crm_account_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="crm_person" idMethod="native" phpName="CrmPerson">
+    <column name="crm_person_id" phpName="CrmPersonId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="first_name" phpName="FirstName" type="VARCHAR" size="27" required="true"/>
+    <column name="last_name" phpName="LastName" type="VARCHAR" size="27" required="true"/>
+    <column name="middle_name" phpName="MiddleName" type="VARCHAR" size="27"/>
+    <column name="birthday" phpName="Birthday" type="DATE"/>
+    <column name="gender" phpName="Gender" type="CHAR" sqlType="enum('male','female')" required="true"/>
+    <column name="phone_number" phpName="PhoneNumber" type="VARCHAR" size="25"/>
+    <foreign-key foreignTable="crm_account" name="crm_person_ibfk_1">
+      <reference local="crm_account_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <unique name="crm_account_id">
+      <unique-column name="crm_account_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="fin_credit_card" idMethod="native" phpName="FinCreditCard">
+    <column name="fin_credit_card_id" phpName="FinCreditCardId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="name_on_card" phpName="NameOnCard" type="VARCHAR" size="150" required="true"/>
+    <column name="number" phpName="Number" type="VARCHAR" size="30" required="true"/>
+    <column name="security_code" phpName="SecurityCode" type="VARCHAR" size="10"/>
+    <column name="expiration_month" phpName="ExpirationMonth" type="TINYINT" required="true"/>
+    <column name="expiration_year" phpName="ExpirationYear" type="SMALLINT" required="true"/>
+    <column name="add_date" phpName="AddDate" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="start_date" phpName="StartDate" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="end_date" phpName="EndDate" type="TIMESTAMP"/>
+    <foreign-key foreignTable="crm_account" name="fin_credit_card_ibfk_1">
+      <reference local="crm_account_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <index name="number">
+      <index-column name="number"/>
+    </index>
+    <index name="crm_account_id">
+      <index-column name="crm_account_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="sec_retailer_login" idMethod="native" phpName="SecRetailerLogin">
+    <column name="sec_retailer_login_id" phpName="SecRetailerLoginId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="retailer" phpName="Retailer" type="CHAR" sqlType="enum('amazon','walmart')" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="login_email" phpName="LoginEmail" type="VARCHAR" size="250" required="true"/>
+    <column name="login_password" phpName="LoginPassword" type="VARCHAR" size="100" required="true"/>
+    <foreign-key foreignTable="crm_account" name="sec_retailer_login_ibfk_1">
+      <reference local="crm_account_id" foreign="crm_account_id"/>
+    </foreign-key>
+    <index name="retailer">
+      <index-column name="retailer"/>
+    </index>
+    <index name="crm_account_id">
+      <index-column name="crm_account_id"/>
+    </index>
+    <index name="login_email">
+      <index-column name="login_email"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="sys_config" idMethod="native" phpName="SysConfig">
+    <column name="sys_config_id" phpName="SysConfigId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="config_key" phpName="ConfigKey" type="VARCHAR" size="40" required="true"/>
+    <column name="description" phpName="Description" type="VARCHAR" size="200" required="true"/>
+    <column name="value" phpName="Value" type="VARCHAR" size="70" required="true"/>
+    <column name="add_time" phpName="AddTime" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <index name="config_key">
+      <index-column name="config_key"/>
+    </index>
+    <index name="value">
+      <index-column name="value"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+</database>
