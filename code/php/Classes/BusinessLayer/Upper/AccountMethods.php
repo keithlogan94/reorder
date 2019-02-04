@@ -22,12 +22,38 @@ abstract class AccountMethods
     {
         try {
             $res = AccountServices::createAccount($params);
+            $json = json_encode($res);
 
-            echo json_encode($res);
+            if (json_last_error()) {
+                throw new Exception(json_last_error_msg());
+            }
+            echo $json;
 
         } catch (Exception $e) {
             throw new Exception('AccountMethods::createAccount() Failed to create account', 1, $e);
         }
+    }
+
+    public static function saveCreditCard(&$params)
+    {
+        $res = AccountServices::saveCreditCard($params);
+        $json = json_encode($res);
+
+        if (json_last_error()) {
+            throw new Exception(json_last_error_msg());
+        }
+        echo $json;
+    }
+
+    public static function saveAddress($params)
+    {
+        $res = AccountServices::saveAddress($params);
+        $json = json_encode($res);
+
+        if (json_last_error()) {
+            throw new Exception(json_last_error_msg());
+        }
+        echo $json;
     }
 
 

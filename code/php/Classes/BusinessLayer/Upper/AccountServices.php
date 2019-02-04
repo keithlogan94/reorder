@@ -17,7 +17,6 @@ abstract class AccountServices
 
     public static function createAccount($params)
     {
-
         try {
             if (!isset($params['firstName'])) {
                 throw new Exception('AccountMethods::createAccount() firstName must be sent in request');
@@ -154,15 +153,33 @@ abstract class AccountServices
 
     public static function saveCreditCard($params)
     {
-        switch (false) {
-            case is_string($params['card_number']):
-            case is_string($params['exp_month']):
-            case is_string($params['exp_year']):
-            case is_string($params['name_on_card']):
-            case is_string($params['sec_code']):
-                throw new Exception('AccountServices::saveCreditCard() not all values were sent correctly');
-                break;
-            default:
+        try {
+            switch (false) {
+                case is_numeric($params['accountId']):
+                case is_string($params['card_number']):
+                case is_string($params['exp_month']):
+                case is_string($params['exp_year']):
+                case is_string($params['name_on_card']):
+                case is_string($params['sec_code']):
+                    throw new Exception('AccountServices::saveCreditCard() not all values were sent correctly');
+                    break;
+                default:
+            }/* TODO: possibly in the future run a test transaction on the credit card here before saving the credit card information */
+            $account = new Account($params['accountId']);
+            if ($account->hasCreditCard()) {
+                $account->getCreditCard()->getData()->setNameOnCard($params['name_on_card']);
+                $account->getCreditCard()->getData()->setNumber($params['card_number']);
+                $account->getCreditCard()->getData()->setExpirationMonth($params['exp_month']);
+                $account->getCreditCard()->getData()->setExpirationYear($params['exp_year']);
+                $account->getCreditCard()->getData()->setSecurityCode($params['sec_code']);
+            } else {
+                $account->saveCreditCard($params['name_on_card'],
+                    $params['card_number'], $params['exp_month'], $params['exp_year'],
+                    $params['sec_code']);
+            }
+            return true;
+        } catch (Exception $e) {
+            throw new Exception('AccountServices::saveCreditCard() Failed to save credit card',1,$e);
         }
     }
 
