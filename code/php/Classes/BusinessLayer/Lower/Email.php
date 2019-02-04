@@ -8,6 +8,8 @@
 
 namespace code\php\Classes\BusinessLayer\Upper;
 
+use Exception;
+
 
 class Email
 {
@@ -32,13 +34,13 @@ class Email
         return is_null($q);
     }
 
-    public static function createEmail(&$account,$email)
+    public static function createEmail(&$account,$emailAddress)
     {
         /* @var $account Account*/
-        if (!self::canCreateEmail($email)) throw new Exception('email already in use');
+        if (!self::canCreateEmail($emailAddress)) throw new Exception('email already in use');
         $email = new \models\models\CrmEmail();
         $email->setCrmAccountId($account->getCrmAccountId());
-        $email->setEmailAddress($email);
+        $email->setEmailAddress($emailAddress);
         $email->save();
         return new Email($account);
     }

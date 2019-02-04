@@ -8,6 +8,18 @@
 
 namespace code\php\Classes\BusinessLayer\Upper;
 
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Person.php';
+use code\php\Classes\BusinessLayer\Upper\Person;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Email.php';
+use code\php\Classes\BusinessLayer\Upper\Email;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ShippingAddress.php';
+use code\php\Classes\BusinessLayer\Upper\ShippingAddress;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/BillingAddress.php';
+use code\php\Classes\BusinessLayer\Upper\BillingAddress;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/PrimaryAddress.php';
+use code\php\Classes\BusinessLayer\Upper\PrimaryAddress;
+
 use Exception;
 use models\models\CrmEmailQuery;
 
@@ -101,7 +113,7 @@ class Account
     public function getPerson()
     {
         if (is_null($this->person)) {
-            $this->person = new Person($this->accountId);
+            $this->person = new Person($this);
         }
         return $this->person;
     }

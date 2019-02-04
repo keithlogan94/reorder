@@ -5,6 +5,13 @@
  * Date: 2/3/2019
  * Time: 10:02 AM
  */
+
+// setup the autoloading
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
+// setup Propel
+require_once $_SERVER['DOCUMENT_ROOT'] . '/generated-conf/config.php';
+
 $GLOBALS['files'] = [];
 
 function listFolderFiles($dir){
@@ -43,6 +50,16 @@ foreach ($GLOBALS['files'] as $file) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
     <title>Test</title>
+    <script>
+        var interval = setInterval(function () {
+            const isErr = document.body.innerHTML.indexOf('<font size="1"><table class="xdebug-error ') !== -1;
+            const errStrStart = document.body.innerHTML.indexOf('<font size="1"><table class="xdebug-error ');
+            if (isErr) {
+                document.write(document.body.innerHTML.substring(errStrStart));
+                clearInterval(interval);
+            }
+        }, 5000);
+    </script>
 </head>
 <?php
 if (isset($_GET['load_unit_tests'])) {

@@ -8,6 +8,8 @@
 
 namespace code\php\Classes\BusinessLayer\Upper;
 
+use Exception;
+
 class PrimaryAddress
 {
     private $q;
@@ -41,6 +43,7 @@ class PrimaryAddress
         /* @var $account Account*/
         if (!self::canCreateAddress($account->getCrmAccountId())) throw new Exception('primary address already exists');
         $address = new \models\models\CrmAddress();
+        $address->setCrmAccountId($account->getCrmAccountId());
         $address->setStreet1($street1);
         $address->setStreet2($street2);
         $address->setCity($city);
