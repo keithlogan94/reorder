@@ -234,4 +234,110 @@ class AccountTests
         echo $account->getPrimaryAddress()->getData()->getZip();
     }
 
+    function testValidSaveCreditCard()
+    {
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
+
+        if ($account->hasCreditCard()) {
+            throw new Exception('should not have credit card');
+        }
+
+        $account->saveCreditCard('Keith Becker', '4111111111111111','12','25','123');
+
+        if (!$account->hasCreditCard()) {
+            throw new Exception('should have credit card');
+        }
+
+    }
+
+    function testValidGetCreditCard()
+    {
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
+
+        if ($account->hasCreditCard()) {
+            throw new Exception('should not have credit card');
+        }
+
+        $account->saveCreditCard('Keith Becker', '4111111111111111','12','25','123');
+
+        if (!$account->hasCreditCard()) {
+            throw new Exception('should have credit card');
+        }
+
+        if (
+            $account->getCreditCard()->getData()->getNameOnCard() !== 'Keith Becker'||
+            $account->getCreditCard()->getData()->getNumber() != '4111111111111111'||
+            $account->getCreditCard()->getData()->getExpirationMonth() != '12'||
+            $account->getCreditCard()->getData()->getExpirationYear() != '25'||
+            $account->getCreditCard()->getData()->getSecurityCode() != '123'
+        ) {
+            echo $account->getCreditCard()->getData()->getNameOnCard();
+            echo $account->getCreditCard()->getData()->getNumber();
+            echo $account->getCreditCard()->getData()->getExpirationMonth();
+            echo $account->getCreditCard()->getData()->getExpirationYear();
+            echo $account->getCreditCard()->getData()->getSecurityCode();
+            throw new Exception('failed to get correct credit card info');
+        }
+
+        echo $account->getCreditCard()->getData()->getNameOnCard();
+        echo $account->getCreditCard()->getData()->getNumber();
+        echo $account->getCreditCard()->getData()->getExpirationMonth();
+        echo $account->getCreditCard()->getData()->getExpirationYear();
+        echo $account->getCreditCard()->getData()->getSecurityCode();
+
+    }
+
+    function testSaveReorderLogin()
+    {
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
+
+        if ($account->hasReOrderLogin()) {
+            throw new Exception('should not have reorder login');
+        }
+
+        $account->saveReorderLogin('testusername','testpassword');
+
+        if (!$account->hasReOrderLogin()) {
+            throw new Exception('should have reorder login');
+        }
+
+    }
+
+    function testGetReorderLogin()
+    {
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
+
+        if ($account->hasReOrderLogin()) {
+            throw new Exception('should not have reorder login');
+        }
+
+        $account->saveReorderLogin('testusername','testpassword');
+
+        if (!$account->hasReOrderLogin()) {
+            throw new Exception('should have reorder login');
+        }
+
+        if (
+            $account->getReorderLogin()->getData()->getUsername() !== 'testusername'||
+            $account->getReorderLogin()->getData()->getPassword() !== 'testpassword'
+        ) {
+            throw new Exception('failed to get correct login');
+        }
+
+        echo $account->getReorderLogin()->getData()->getUsername();
+        echo $account->getReorderLogin()->getData()->getPassword();
+
+
+
+    }
+
+
 }

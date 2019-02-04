@@ -11,6 +11,7 @@ namespace code\php\Classes\BusinessLayer\Upper;
 
 use models\models\FinCreditCard;
 use models\models\FinCreditCardQuery;
+use Exception;
 
 class CreditCard
 {

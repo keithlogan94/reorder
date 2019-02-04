@@ -19,6 +19,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\BillingAddress;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/PrimaryAddress.php';
 use code\php\Classes\BusinessLayer\Upper\PrimaryAddress;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/CreditCard.php';
+use code\php\Classes\BusinessLayer\Upper\CreditCard;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ReOrderLogin.php';
+use code\php\Classes\BusinessLayer\Upper\ReOrderLogin;
 
 use Exception;
 use models\models\CrmEmailQuery;
