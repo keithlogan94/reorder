@@ -11,6 +11,7 @@ namespace code\php\Classes\BusinessLayer\Upper;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Account.php';
 
 use Exception;
+use models\models\CrmLoginCredentialsQuery;
 
 abstract class AccountServices
 {
@@ -180,6 +181,27 @@ abstract class AccountServices
             return true;
         } catch (Exception $e) {
             throw new Exception('AccountServices::saveCreditCard() Failed to save credit card',1,$e);
+        }
+    }
+
+    public static function getAccountIdByReOrderUsernameAndPassword($params)
+    {
+        try {
+            if (!is_string($params['username']) || !is_string($params['password'])) {
+                throw new Exception('username and password must be set in $params');
+            }
+            $q = CrmLoginCredentialsQuery::create()
+                ->filterByUsername($params['username'])
+                ->filterByPassword($params['password'])
+                ->findOne();
+            if (is_null($q)) {
+                return false;
+            } else {
+                return $q->getCrmAccountId();
+            }
+        } catch (Exception $e) {
+            throw new Exception('AccountServices::getAccountIdByReOrderUsernameAndPassword() Failed to find' .
+                ' accountId with provided username and password');
         }
     }
 

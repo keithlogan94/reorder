@@ -18,6 +18,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/SysW
 use code\php\Classes\DataLayer\Upper\SysWrapper;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/AccountMethods.php';
 use code\php\Classes\BusinessLayer\Upper\AccountMethods;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/AccountServices.php';
+use code\php\Classes\BusinessLayer\Upper\AccountServices;
 
 
 use Exception;
@@ -53,6 +55,35 @@ abstract class SysMethods
                 if ($_POST['apikey'] !== $config['configValue']) {
                     throw new Exception('SysMethods::handleRequest() sent api key does not match ReOrder API Key');
                 }
+            }
+
+            if (isset($_POST['accountId'])) {
+                unset($_POST['accountId']);
+            }
+
+            $requestContainsUsername = is_string($_POST['reorder_username']) && strlen($_POST['reorder_username']) > 0;
+            $requestContainsPassword = is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
+
+            if (!$requestContainsUsername || !$requestContainsPassword) {
+                if ($_POST['className'] !== 'AccountServices' || $_POST['method'] !== 'createAccount') {
+                    throw new Exception('user cannot access any method except AccountServices::createAccount ' .
+                        'if not providing username and password');
+                }
+            }
+
+            $accountId = AccountServices::getAccountIdByReOrderUsernameAndPassword([
+                'username' => $_POST['reorder_username'],
+                'password' => $_POST['reorder_password']
+            ]);
+            if ($accountId === false) {
+                throw new Exception('user credentials were incorrect');
+            }
+            if (is_numeric($accountId)) {
+                unset($_POST['reorder_password']);
+                unset($_POST['reorder_username']);
+                $_POST['accountId'] = $accountId;
+            } else {
+                throw new Exception('an error occurred getting accountId from user credentials');
             }
 
             //check if method exists in class and call it
