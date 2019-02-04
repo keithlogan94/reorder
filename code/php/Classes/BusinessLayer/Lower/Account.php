@@ -23,6 +23,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\CreditCard;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ReOrderLogin.php';
 use code\php\Classes\BusinessLayer\Upper\ReOrderLogin;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/AmazonLogin.php';
+use code\php\Classes\BusinessLayer\Upper\AmazonLogin;
 
 use Exception;
 use models\models\CrmEmailQuery;
@@ -37,6 +39,7 @@ class Account
     private $billingAddress;
     private $creditCard;
     private $reorderLogin;
+    private $amazonLogin;
 
     public function __construct($accountId)
     {
@@ -131,6 +134,30 @@ class Account
             return false;
         }
         return true;
+    }
+
+    public function hasAmazonLogin()
+    {
+        try {
+            $amazonLogin = new AmazonLogin($this);
+            $this->amazonLogin = $amazonLogin;
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
+
+    public function saveAmazonLogin($username,$password)
+    {
+        $this->amazonLogin = AmazonLogin::createLogin($this, $username, $password);
+    }
+
+    public function getAmazonLogin()
+    {
+        if (is_null($this->amazonLogin)) {
+            $this->amazonLogin = new AmazonLogin($this);
+        }
+        return $this->amazonLogin;
     }
 
     public function hasReOrderLogin()

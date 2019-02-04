@@ -335,8 +335,50 @@ class AccountTests
         echo $account->getReorderLogin()->getData()->getUsername();
         echo $account->getReorderLogin()->getData()->getPassword();
 
+    }
 
+    function testSaveAmazonLogin()
+    {
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
 
+        if ($account->hasAmazonLogin()) {
+            throw new Exception('should not have amazon login yet');
+        }
+
+        $account->saveAmazonLogin('testamazonusername','testamazonpassword');
+
+        if (!$account->hasAmazonLogin()) {
+            throw new Exception('should have amazon login');
+        }
+
+    }
+
+    function testGetAmazonLogin()
+    {
+
+        $randEmail = 'keithtest'.rand(0,10000000).'@gmail.com';
+        $account = Account::createAccount($randEmail,'testFirstName','testLastName','testMiddleName',
+            '8082258615','male');
+
+        if ($account->hasAmazonLogin()) {
+            throw new Exception('should not have amazon login yet');
+        }
+
+        $account->saveAmazonLogin('testamazonusername','testamazonpassword');
+
+        if (!$account->hasAmazonLogin()) {
+            throw new Exception('should have amazon login');
+        }
+
+        if ($account->getAmazonLogin()->getData()->getLoginEmail() !== 'testamazonusername'||
+            $account->getAmazonLogin()->getData()->getLoginPassword() !== 'testamazonpassword') {
+            throw new Exception('failed to get correct username and password');
+        }
+
+        echo $account->getAmazonLogin()->getData()->getLoginEmail();
+        echo $account->getAmazonLogin()->getData()->getLoginPassword();
     }
 
 
