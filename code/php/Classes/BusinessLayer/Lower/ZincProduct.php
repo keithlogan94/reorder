@@ -27,6 +27,25 @@ class ZincProduct
     private $price;
     private $addon;
 
+    public function getFullArray()
+    {
+        return array(
+            'productId' => $this->productId,
+            'quantity' => $this->quantity,
+            'prime' => $this->prime,
+            'title' => $this->title,
+            'image' => $this->image,
+            'brand' => $this->brand,
+            'productDetails' => $this->productDetails,
+            'pantry' => $this->pantry,
+            'numReviews' => $this->numReviews,
+            'stars' => $this->stars,
+            'fresh' => $this->fresh,
+            'price' => $this->price,
+            'addon' => $this->addon
+        );
+    }
+
     public function isReadyToBeProcessedInOrder()
     {
         return !is_null($this->productId) && !is_null($this->price) && !is_null($this->quantity);
@@ -268,8 +287,6 @@ class ZincProduct
     {
         $this->addon = $addon;
     }
-
-
 
     public function getOrderArray()
     {

@@ -68,20 +68,20 @@ if (isset($_GET['load_unit_tests'])) {
     echo '<body>';
 }
 ?>
-<div class="container">
+<div class="container" style="overflow-x:hidden;">
     <div class="jumbotron">
         <h1 class="display-4">Unit Tests</h1>
     </div>
     <div class="input-group mb-3">
-        <input placeholder="Search For Any Unit Test File..." type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        <input onkeyup="updateTestFiles()" id='search-test-files-input' placeholder="Search For Any Unit Test File..." type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
     </div>
     <div style="display:inline-flex;flex-direction:row;">
     <?php
     foreach ($testFiles as $file) {
         ?>
-        <div class="card" style="width: 18rem;margin-left:20px;">
+        <div class="test-file card" style="width: 18rem;margin-left:20px;">
             <div class="card-body">
-                <h5 class="card-title"><?= basename($file) ?></h5>
+                <h5 class="card-title test-file-name"><?= basename($file) ?></h5>
                 <p class="card-text"><?= $file ?></p>
                 <a href="/test/?load_unit_tests=<?= $file ?>" class="btn btn-primary">Run Unit Tests</a>
             </div>
@@ -180,6 +180,20 @@ if (isset($_GET['load_unit_tests'])) {
         });
         $('body').css('opacity','1');
     });
+
+    function updateTestFiles() {
+        $('.test-file').show();
+        const searchText = $('#search-test-files-input').val();
+        if (searchText.length === 0) console.log('no text in search returing');
+        if (searchText.length === 0) return;
+        $.each($('.test-file'), function (index, val) {
+            console.log($(val).find('.test-file-name').html());
+            if ($(val).find('.test-file-name').html().toLowerCase().indexOf(searchText.toLowerCase()) === -1) {
+                console.log('hiding');
+                $(val).hide();
+            }
+        });
+    }
 </script>
 
 </body>

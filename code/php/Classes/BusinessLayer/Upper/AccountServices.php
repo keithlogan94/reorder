@@ -16,6 +16,13 @@ use models\models\CrmLoginCredentialsQuery;
 abstract class AccountServices
 {
 
+    public static function performProductSearch($params)
+    {
+        if (!isset($params)) {
+
+        }
+    }
+
     public static function createAccount($params)
     {
         try {

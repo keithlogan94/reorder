@@ -18,6 +18,20 @@ class ZincProductList
 
     private $products = [];
 
+    public function getProductsFullJson()
+    {
+        $array = [];
+        foreach ($this->products as $product) {
+            /* @var $product ZincProduct */
+            $array[] = $product->getFullArray();
+        }
+        $json = json_encode($array);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception(json_last_error_msg());
+        }
+        return $json;
+    }
+
     public static function loadProductListFromZincSearchResults($resultsArray)
     {
         if (!is_array($resultsArray)) {

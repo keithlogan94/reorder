@@ -61,6 +61,7 @@ class Account
     {
         $zincProductSearch = new \code\php\Classes\BusinessLayer\Upper\ZincProductSearch();
         $foundProducts = $zincProductSearch->search('amazon', $searchQuery);
+        return $foundProducts;
     }
 
     /**
