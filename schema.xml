@@ -119,6 +119,16 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="fin_order" idMethod="native" phpName="FinOrder" namespace="models">
+    <column name="fin_order_id" phpName="FinOrderId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" required="true"/>
+    <column name="zinc_request_id" phpName="ZincRequestId" type="VARCHAR" size="200" required="true"/>
+    <column name="order_json" phpName="OrderJson" type="VARCHAR" size="2000" required="true"/>
+    <column name="add_time" phpName="AddTime" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="request_payload_validation" idMethod="native" phpName="RequestPayloadValidation" namespace="models">
     <column name="request_index" phpName="RequestIndex" type="VARCHAR" size="50"/>
     <column name="validation_method" phpName="ValidationMethod" type="CHAR" sqlType="enum('number','regex','string','bool')"/>

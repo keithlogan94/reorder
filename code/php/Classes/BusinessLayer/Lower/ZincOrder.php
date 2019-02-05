@@ -16,6 +16,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\TestMode;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ZincAPIKey.php';
 use code\php\Classes\BusinessLayer\Upper\ZincAPIKey;
+use models\models\FinOrder;
 
 class ZincOrder
 {
@@ -31,12 +32,15 @@ class ZincOrder
     private $shippingDetails;
     private $shippingMethod;
     private $paymentMethod;
+    /* @var $account Account*/
+    private $account;
 
     public function __construct($account)
     {
         $this->setShippingAndBillingAddresses($account);
         $this->setPaymentMethod($account);
         $this->setRetailerCredentials($account);
+        $this->account = $account;
     }
 
     private function setGiftMessage($message)
@@ -218,6 +222,17 @@ class ZincOrder
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $res = curl_exec($ch);
+        $res = json_decode($res, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('an error ocurred processing json from zinc when finalizing order: ' . json_last_error_msg());
+        }
+
+        $order = new FinOrder();
+        $order->setCrmAccountId($this->account->getCrmAccountId());
+        $order->setOrderJson($payload);
+        $order->setZincRequestId($res['request_id']);
+        $order->save();
 
     }
 

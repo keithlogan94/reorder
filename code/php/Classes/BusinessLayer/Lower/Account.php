@@ -25,6 +25,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\ReOrderLogin;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/AmazonLogin.php';
 use code\php\Classes\BusinessLayer\Upper\AmazonLogin;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ZincProductSearch.php';
+use code\php\Classes\BusinessLayer\Upper\ZincProductSearch;
 
 use Exception;
 use models\models\CrmEmailQuery;
@@ -53,6 +55,12 @@ class Account
             throw new Exception('failed to find account by email address');
         }
         return new Account($q->getCrmAccountId());
+    }
+
+    public function performProductSearch($searchQuery)
+    {
+        $zincProductSearch = new \code\php\Classes\BusinessLayer\Upper\ZincProductSearch();
+        $foundProducts = $zincProductSearch->search('amazon', $searchQuery);
     }
 
     /**

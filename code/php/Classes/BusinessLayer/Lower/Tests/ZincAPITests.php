@@ -40,7 +40,6 @@ class ZincAPITests
 
         $zSearch = new ZincProductSearch();
         $products = $zSearch->search('amazon','Smart Ones, Traditional Lasagna With Meat Sauce');
-
         $zincOrder = new ZincOrder($account);
         $zincOrder->buy('free',$products,'Thank you for using ReOrder!',0,'amazon');
 

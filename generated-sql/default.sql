@@ -141,6 +141,22 @@ CREATE TABLE `fin_credit_card`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- fin_order
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `fin_order`;
+
+CREATE TABLE `fin_order`
+(
+    `fin_order_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `crm_account_id` INTEGER NOT NULL,
+    `zinc_request_id` VARCHAR(200) NOT NULL,
+    `order_json` VARCHAR(2000) NOT NULL,
+    `add_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`fin_order_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- request_payload_validation
 -- ---------------------------------------------------------------------
 
