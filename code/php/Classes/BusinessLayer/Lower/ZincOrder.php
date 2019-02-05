@@ -14,6 +14,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\Account;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/TestMode.php';
 use code\php\Classes\BusinessLayer\Upper\TestMode;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ZincAPIKey.php';
+use code\php\Classes\BusinessLayer\Upper\ZincAPIKey;
 
 class ZincOrder
 {
@@ -37,6 +39,22 @@ class ZincOrder
         $this->setRetailerCredentials($account);
     }
 
+    private function setGiftMessage($message)
+    {
+        $this->giftMessage = $message;
+        $this->isGift = true;
+    }
+
+    private function setMaxPrice($price)
+    {
+        $this->maxPrice = $price;
+    }
+
+    private function setRetailer($retailer)
+    {
+        $this->retailer = $retailer;
+    }
+
     private function isZincOrderReadyForProcessing()
     {
         return $this->isAddressInformationSet() && $this->isPaymentMethodSet() &&
@@ -46,7 +64,7 @@ class ZincOrder
             !is_null($this->maxPrice);
     }
 
-    public function addProductsToOrderByZincProductList($zincProductList)
+    private function addProductsToOrderByZincProductList($zincProductList)
     {
         if (!($zincProductList instanceof ZincProductList)) {
             throw new Exception('$zincProductList should be instance of ZincProductList');
@@ -98,7 +116,7 @@ class ZincOrder
         return !is_null($this->paymentMethod);
     }
 
-    public function setShippingMethod($method)
+    private function setShippingMethod($method)
     {
         if (!in_array($method, array('free','cheapest','fastest'))) {
             throw new Exception('unsupported shipping method');
@@ -107,7 +125,7 @@ class ZincOrder
         $this->shippingMethod = $method;
     }
 
-    public function setShippingDetails($orderByMethod, $maxDays, $maxPrice)
+    private function setShippingDetails($orderByMethod, $maxDays, $maxPrice)
     {
         if (!in_array($orderByMethod, array('price','speed'))) {
             throw new Exception('unsupported order by method');
@@ -174,7 +192,36 @@ class ZincOrder
         );
     }
 
-    public function getOrderArray()
+    public function buy($shippingMethod, $productsToPurchase, $giftMessage, $maxPrice, $retailer)
+    {
+        $this->setShippingMethod($shippingMethod);
+        $this->addProductsToOrderByZincProductList($productsToPurchase);
+        $this->setGiftMessage($giftMessage);
+        $this->setMaxPrice($maxPrice);
+        $this->setRetailer($retailer);
+        $this->finalize();
+    }
+
+    private function finalize()
+    {
+        $ch = curl_init();
+
+        $payload = json_encode($this->getOrderArray());
+
+        var_dump($payload);
+
+        $zincAPIKey = new \code\php\Classes\BusinessLayer\Upper\ZincAPIKey();
+        curl_setopt($ch, CURLOPT_URL, 'https://api.zinc.io/v1/orders');
+        curl_setopt($ch, CURLOPT_USERNAME, (string)$zincAPIKey);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $res = curl_exec($ch);
+
+    }
+
+    private function getOrderArray()
     {
         if (!$this->isZincOrderReadyForProcessing()) {
             throw new Exception('zinc order is not ready for processing');
