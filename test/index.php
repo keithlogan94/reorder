@@ -184,12 +184,9 @@ if (isset($_GET['load_unit_tests'])) {
     function updateTestFiles() {
         $('.test-file').show();
         const searchText = $('#search-test-files-input').val();
-        if (searchText.length === 0) console.log('no text in search returing');
         if (searchText.length === 0) return;
         $.each($('.test-file'), function (index, val) {
-            console.log($(val).find('.test-file-name').html());
             if ($(val).find('.test-file-name').html().toLowerCase().indexOf(searchText.toLowerCase()) === -1) {
-                console.log('hiding');
                 $(val).hide();
             }
         });
