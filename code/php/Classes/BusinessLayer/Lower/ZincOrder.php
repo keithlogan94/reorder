@@ -12,6 +12,8 @@ use Exception;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Account.php';
 use code\php\Classes\BusinessLayer\Upper\Account;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/TestMode.php';
+use code\php\Classes\BusinessLayer\Upper\TestMode;
 
 class ZincOrder
 {
@@ -42,6 +44,25 @@ class ZincOrder
             !empty($this->zincProductsToOrder) && !is_null($this->isGift) &&
             !is_null($this->retailerCredentials) && !is_null($this->giftMessage) &&
             !is_null($this->maxPrice);
+    }
+
+    public function addProductsToOrderByZincProductList($zincProductList)
+    {
+        if (!($zincProductList instanceof ZincProductList)) {
+            throw new Exception('$zincProductList should be instance of ZincProductList');
+        }
+        /* @var $zincProductList ZincProductList*/
+        $products = $zincProductList->getProducts();
+        foreach ($products as $product) {
+            /* @var $product ZincProduct*/
+            if (!($product instanceof ZincProduct)) {
+                throw new Exception('$product should be instance of ZincProduct');
+            }
+            if (!$product->isReadyToBeProcessedInOrder()) {
+                throw new Exception('product added to ZincOrder is not ready to be processed in order');
+            }
+            $this->zincProductsToOrder[] = $product;
+        }
     }
 
     private function setRetailerCredentials($account)
@@ -163,6 +184,9 @@ class ZincOrder
             /* @var $product ZincProduct*/
             $products[] = $product->getOrderArray();
         }
+        $testMode = new \code\php\Classes\BusinessLayer\Upper\TestMode();
+        //if test mode is enabled then always set max price to 0 so that no transactions actually go through
+        $this->maxPrice = $testMode->isEnabled() ? 0 : $this->maxPrice;
         return array(
             'retailer' => $this->retailer,
             'products' => $products,
