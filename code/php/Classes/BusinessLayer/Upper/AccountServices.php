@@ -9,6 +9,8 @@
 namespace code\php\Classes\BusinessLayer\Upper;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Account.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/UPCItem.php';
+use code\php\Classes\BusinessLayer\Upper\UPCItem;
 
 use Exception;
 use models\models\CrmLoginCredentialsQuery;
@@ -18,8 +20,22 @@ abstract class AccountServices
 
     public static function performProductSearch($params)
     {
-        if (!isset($params)) {
-
+        try {
+            if (!isset($params['upcCode'])) {
+                throw new Exception('AccountServices::performProductSearch() upcCode must be set');
+            }
+            if (!is_numeric($params['upcCode'])) {
+                throw new Exception('AccountServices::performProductSearch() upcCode must be numeric');
+            }
+            if (!is_numeric($params['accountId'])) {
+                throw new Exception('AccountServices::performProductSearch() accountId must be numeric');
+            }
+            $upcItem = new \code\php\Classes\BusinessLayer\Upper\UPCItem($params['upcCode']);
+            $account = new Account($params['accountId']);
+            $foundProducts = $account->performProductSearch($upcItem);
+            return $foundProducts->getProductsArray();
+        } catch (Exception $e) {
+            throw new Exception('AccountServices::performProductSearch() Failed to perform product search',1,$e);
         }
     }
 

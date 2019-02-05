@@ -12,15 +12,20 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\ZincAPIKey;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ZincProductList.php';
 use code\php\Classes\BusinessLayer\Upper\ZincProductList;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/UPCItem.php';
+use code\php\Classes\BusinessLayer\Upper\UPCItem;
 
 use Exception;
 
 class ZincProductSearch
 {
 
-    public function search($retailer, $query)
+    public function search($retailer, $upcItem)
     {
-        $query = urlencode($query);
+        if (!($upcItem instanceof UPCItem)) {
+            throw new Exception('$upcItem must be instance of UPCItem');
+        }
+        $query = urlencode($upcItem->getTitle());
         $retailer = urlencode($retailer);
         $url = "https://api.zinc.io/v1/search?query=$query&page=1&retailer=$retailer";
         echo 'requesting page '.$url;

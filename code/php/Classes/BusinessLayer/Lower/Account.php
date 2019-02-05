@@ -27,6 +27,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/
 use code\php\Classes\BusinessLayer\Upper\AmazonLogin;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/ZincProductSearch.php';
 use code\php\Classes\BusinessLayer\Upper\ZincProductSearch;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/UPCItem.php';
+use code\php\Classes\BusinessLayer\Upper\UPCItem;
 
 use Exception;
 use models\models\CrmEmailQuery;
@@ -57,10 +59,13 @@ class Account
         return new Account($q->getCrmAccountId());
     }
 
-    public function performProductSearch($searchQuery)
+    public function performProductSearch($upcItem)
     {
+        if (!($upcItem instanceof UPCItem)) {
+            throw new Exception('$upcItem must be instance of UPCItem');
+        }
         $zincProductSearch = new \code\php\Classes\BusinessLayer\Upper\ZincProductSearch();
-        $foundProducts = $zincProductSearch->search('amazon', $searchQuery);
+        $foundProducts = $zincProductSearch->search('amazon', $upcItem);
         return $foundProducts;
     }
 
