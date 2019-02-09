@@ -5,6 +5,8 @@
  * Date: 2/4/2019
  * Time: 12:09 PM
  */
+ 
+ header('Access-Control-Allow-Origin: *');
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/SysMethods.php';
 use code\php\Classes\BusinessLayer\Upper\SysMethods;
