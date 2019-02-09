@@ -64,27 +64,32 @@ abstract class SysMethods
             $requestContainsUsername = is_string($_POST['reorder_username']) && strlen($_POST['reorder_username']) > 0;
             $requestContainsPassword = is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
 
-            if (!$requestContainsUsername || !$requestContainsPassword) {
-                if ($_POST['className'] !== 'AccountServices' || $_POST['method'] !== 'createAccount') {
-                    throw new Exception('user cannot access any method except AccountServices::createAccount ' .
-                        'if not providing username and password');
-                }
-            }
+			$isRequestToCreateAccount = $_POST['className'] === 'AccountServices' && $_POST['method'] === 'createAccount';
 
-            $accountId = AccountServices::getAccountIdByReOrderUsernameAndPassword([
-                'username' => $_POST['reorder_username'],
-                'password' => $_POST['reorder_password']
-            ]);
-            if ($accountId === false) {
-                throw new Exception('user credentials were incorrect');
-            }
-            if (is_numeric($accountId)) {
-                unset($_POST['reorder_password']);
-                unset($_POST['reorder_username']);
-                $_POST['accountId'] = $accountId;
-            } else {
-                throw new Exception('an error occurred getting accountId from user credentials');
-            }
+			if (!$isRequestToCreateAccount) {				
+				if (!$requestContainsUsername || !$requestContainsPassword) {
+					throw new Exception('user cannot access any method except AccountServices::createAccount ' .
+						'if not providing username and password');
+				}
+				/* if request is not to create an account then 
+				we want to look up the current account 
+				- this is so that no requests can be made to the server unless 
+				they were sent on behalf of an existing account or to create a new account */
+				$accountId = AccountServices::getAccountIdByReOrderUsernameAndPassword([
+					'username' => $_POST['reorder_username'],
+					'password' => $_POST['reorder_password']
+				]);
+				if ($accountId === false) {
+					throw new Exception('user credentials were incorrect');
+				}
+				if (is_numeric($accountId)) {
+					unset($_POST['reorder_password']);
+					unset($_POST['reorder_username']);
+					$_POST['accountId'] = $accountId;
+				} else {
+					throw new Exception('an error occurred getting accountId from user credentials');
+				}					
+			}
 
             //check if method exists in class and call it
             $class = $_POST['className'];
