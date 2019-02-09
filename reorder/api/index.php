@@ -13,7 +13,11 @@ try {
     SysMethods::handleRequest();
 } catch (Exception $e) {
     http_response_code(500);
-    $res = json_encode(['error'=>$e->getMessage()]);
+	$errorMessages = [];
+	do {
+		$errorMessages[] = $e->getMessage();
+	} while (($e = $e->getPrevious()) instanceof Exception);
+    $res = json_encode(['errors'=>$errorMessages]);
     if (json_last_error() !== JSON_ERROR_NONE) exit('error: ' . json_last_error_msg());
     exit($res);
 }
