@@ -17,7 +17,7 @@ abstract class SysServices
         if (!is_string($params['date'])) {
             throw new \Exception('SysServices::validateDateString() date must be set in params');
         }
-        return preg_match('^\d\d\d\d-\d\d-\d\d$', $params['date']) === 1;
+        return preg_match('/^\d\d\d\d-\d\d-\d\d$/', $params['date']) === 1;
     }
 
 }
