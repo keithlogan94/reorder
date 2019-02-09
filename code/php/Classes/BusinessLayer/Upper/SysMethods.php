@@ -61,8 +61,10 @@ abstract class SysMethods
                 unset($_POST['accountId']);
             }
 
-            $requestContainsUsername = is_string($_POST['reorder_username']) && strlen($_POST['reorder_username']) > 0;
-            $requestContainsPassword = is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
+            $requestContainsUsername = isset($_POST['reorder_username']) &&
+			is_string($_POST['reorder_username']) && strlen($_POST['reorder_username']) > 0;
+            $requestContainsPassword = isset($_POST['reorder_password']) &&
+			is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
 
 			$isRequestToCreateAccount = $_POST['className'] === 'AccountServices' && $_POST['method'] === 'createAccount';
 
