@@ -112,6 +112,7 @@ class Account
     public static function createAccount($email, $firstName, $lastName, $middleName, $phone, $gender)
     {
         if (self::doesAccountExist($email)) {
+			set_user_error('Sorry, that email is already in use.');
             throw new Exception('email already in use');
         }
 
