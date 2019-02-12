@@ -34,6 +34,7 @@ use models\models\Map\CountryTableMap;
  * @method     ChildCountryQuery orderByHeadofstate($order = Criteria::ASC) Order by the HeadOfState column
  * @method     ChildCountryQuery orderByCapital($order = Criteria::ASC) Order by the Capital column
  * @method     ChildCountryQuery orderByCode2($order = Criteria::ASC) Order by the Code2 column
+ * @method     ChildCountryQuery orderByActive($order = Criteria::ASC) Order by the active column
  *
  * @method     ChildCountryQuery groupByCode() Group by the Code column
  * @method     ChildCountryQuery groupByName() Group by the Name column
@@ -50,6 +51,7 @@ use models\models\Map\CountryTableMap;
  * @method     ChildCountryQuery groupByHeadofstate() Group by the HeadOfState column
  * @method     ChildCountryQuery groupByCapital() Group by the Capital column
  * @method     ChildCountryQuery groupByCode2() Group by the Code2 column
+ * @method     ChildCountryQuery groupByActive() Group by the active column
  *
  * @method     ChildCountryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCountryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -76,7 +78,8 @@ use models\models\Map\CountryTableMap;
  * @method     ChildCountry findOneByGovernmentform(string $GovernmentForm) Return the first ChildCountry filtered by the GovernmentForm column
  * @method     ChildCountry findOneByHeadofstate(string $HeadOfState) Return the first ChildCountry filtered by the HeadOfState column
  * @method     ChildCountry findOneByCapital(int $Capital) Return the first ChildCountry filtered by the Capital column
- * @method     ChildCountry findOneByCode2(string $Code2) Return the first ChildCountry filtered by the Code2 column *
+ * @method     ChildCountry findOneByCode2(string $Code2) Return the first ChildCountry filtered by the Code2 column
+ * @method     ChildCountry findOneByActive(boolean $active) Return the first ChildCountry filtered by the active column *
 
  * @method     ChildCountry requirePk($key, ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOne(ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -96,6 +99,7 @@ use models\models\Map\CountryTableMap;
  * @method     ChildCountry requireOneByHeadofstate(string $HeadOfState) Return the first ChildCountry filtered by the HeadOfState column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByCapital(int $Capital) Return the first ChildCountry filtered by the Capital column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByCode2(string $Code2) Return the first ChildCountry filtered by the Code2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCountry requireOneByActive(boolean $active) Return the first ChildCountry filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCountry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
  * @method     ChildCountry[]|ObjectCollection findByCode(string $Code) Return ChildCountry objects filtered by the Code column
@@ -113,6 +117,7 @@ use models\models\Map\CountryTableMap;
  * @method     ChildCountry[]|ObjectCollection findByHeadofstate(string $HeadOfState) Return ChildCountry objects filtered by the HeadOfState column
  * @method     ChildCountry[]|ObjectCollection findByCapital(int $Capital) Return ChildCountry objects filtered by the Capital column
  * @method     ChildCountry[]|ObjectCollection findByCode2(string $Code2) Return ChildCountry objects filtered by the Code2 column
+ * @method     ChildCountry[]|ObjectCollection findByActive(boolean $active) Return ChildCountry objects filtered by the active column
  * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -699,6 +704,33 @@ abstract class CountryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CountryTableMap::COL_CODE2, $code2, $comparison);
+    }
+
+    /**
+     * Filter the query on the active column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByActive(true); // WHERE active = true
+     * $query->filterByActive('yes'); // WHERE active = true
+     * </code>
+     *
+     * @param     boolean|string $active The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCountryQuery The current query, for fluid interface
+     */
+    public function filterByActive($active = null, $comparison = null)
+    {
+        if (is_string($active)) {
+            $active = in_array(strtolower($active), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CountryTableMap::COL_ACTIVE, $active, $comparison);
     }
 
     /**

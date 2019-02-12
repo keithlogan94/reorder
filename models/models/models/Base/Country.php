@@ -174,6 +174,14 @@ abstract class Country implements ActiveRecordInterface
     protected $code2;
 
     /**
+     * The value for the active field.
+     *
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $active;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -198,6 +206,7 @@ abstract class Country implements ActiveRecordInterface
         $this->localname = '';
         $this->governmentform = '';
         $this->code2 = '';
+        $this->active = true;
     }
 
     /**
@@ -578,6 +587,26 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
+     * Get the [active] column value.
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Get the [active] column value.
+     *
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->getActive();
+    }
+
+    /**
      * Set the value of [code] column.
      *
      * @param string $v new value
@@ -878,6 +907,34 @@ abstract class Country implements ActiveRecordInterface
     } // setCode2()
 
     /**
+     * Sets the value of the [active] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\models\models\Country The current object (for fluent API support)
+     */
+    public function setActive($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->active !== $v) {
+            $this->active = $v;
+            $this->modifiedColumns[CountryTableMap::COL_ACTIVE] = true;
+        }
+
+        return $this;
+    } // setActive()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -920,6 +977,10 @@ abstract class Country implements ActiveRecordInterface
             }
 
             if ($this->code2 !== '') {
+                return false;
+            }
+
+            if ($this->active !== true) {
                 return false;
             }
 
@@ -993,6 +1054,9 @@ abstract class Country implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : CountryTableMap::translateFieldName('Code2', TableMap::TYPE_PHPNAME, $indexType)];
             $this->code2 = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : CountryTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->active = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1001,7 +1065,7 @@ abstract class Country implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = CountryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = CountryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\models\\models\\Country'), 0, $e);
@@ -1243,6 +1307,9 @@ abstract class Country implements ActiveRecordInterface
         if ($this->isColumnModified(CountryTableMap::COL_CODE2)) {
             $modifiedColumns[':p' . $index++]  = 'Code2';
         }
+        if ($this->isColumnModified(CountryTableMap::COL_ACTIVE)) {
+            $modifiedColumns[':p' . $index++]  = 'active';
+        }
 
         $sql = sprintf(
             'INSERT INTO country (%s) VALUES (%s)',
@@ -1298,6 +1365,9 @@ abstract class Country implements ActiveRecordInterface
                         break;
                     case 'Code2':
                         $stmt->bindValue($identifier, $this->code2, PDO::PARAM_STR);
+                        break;
+                    case 'active':
+                        $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1399,6 +1469,9 @@ abstract class Country implements ActiveRecordInterface
             case 14:
                 return $this->getCode2();
                 break;
+            case 15:
+                return $this->getActive();
+                break;
             default:
                 return null;
                 break;
@@ -1443,6 +1516,7 @@ abstract class Country implements ActiveRecordInterface
             $keys[12] => $this->getHeadofstate(),
             $keys[13] => $this->getCapital(),
             $keys[14] => $this->getCode2(),
+            $keys[15] => $this->getActive(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1527,6 +1601,9 @@ abstract class Country implements ActiveRecordInterface
             case 14:
                 $this->setCode2($value);
                 break;
+            case 15:
+                $this->setActive($value);
+                break;
         } // switch()
 
         return $this;
@@ -1597,6 +1674,9 @@ abstract class Country implements ActiveRecordInterface
         }
         if (array_key_exists($keys[14], $arr)) {
             $this->setCode2($arr[$keys[14]]);
+        }
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setActive($arr[$keys[15]]);
         }
     }
 
@@ -1683,6 +1763,9 @@ abstract class Country implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CountryTableMap::COL_CODE2)) {
             $criteria->add(CountryTableMap::COL_CODE2, $this->code2);
+        }
+        if ($this->isColumnModified(CountryTableMap::COL_ACTIVE)) {
+            $criteria->add(CountryTableMap::COL_ACTIVE, $this->active);
         }
 
         return $criteria;
@@ -1788,6 +1871,7 @@ abstract class Country implements ActiveRecordInterface
         $copyObj->setHeadofstate($this->getHeadofstate());
         $copyObj->setCapital($this->getCapital());
         $copyObj->setCode2($this->getCode2());
+        $copyObj->setActive($this->getActive());
         if ($makeNew) {
             $copyObj->setNew(true);
         }
@@ -1837,6 +1921,7 @@ abstract class Country implements ActiveRecordInterface
         $this->headofstate = null;
         $this->capital = null;
         $this->code2 = null;
+        $this->active = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

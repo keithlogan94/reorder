@@ -40,7 +40,8 @@ CREATE TABLE `country`
     `GovernmentForm` CHAR(45) DEFAULT '' NOT NULL,
     `HeadOfState` CHAR(60),
     `Capital` INTEGER,
-    `Code2` CHAR(2) DEFAULT '' NOT NULL
+    `Code2` CHAR(2) DEFAULT '' NOT NULL,
+    `active` TINYINT(1) DEFAULT 1
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

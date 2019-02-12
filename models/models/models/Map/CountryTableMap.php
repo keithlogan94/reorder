@@ -60,7 +60,7 @@ class CountryTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 16;
 
     /**
      * The number of lazy-loaded columns
@@ -70,7 +70,7 @@ class CountryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 16;
 
     /**
      * the column name for the Code field
@@ -148,6 +148,11 @@ class CountryTableMap extends TableMap
     const COL_CODE2 = 'country.Code2';
 
     /**
+     * the column name for the active field
+     */
+    const COL_ACTIVE = 'country.active';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -159,11 +164,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Code', 'Name', 'Continent', 'Region', 'Surfacearea', 'Indepyear', 'Population', 'Lifeexpectancy', 'Gnp', 'Gnpold', 'Localname', 'Governmentform', 'Headofstate', 'Capital', 'Code2', ),
-        self::TYPE_CAMELNAME     => array('code', 'name', 'continent', 'region', 'surfacearea', 'indepyear', 'population', 'lifeexpectancy', 'gnp', 'gnpold', 'localname', 'governmentform', 'headofstate', 'capital', 'code2', ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE, CountryTableMap::COL_NAME, CountryTableMap::COL_CONTINENT, CountryTableMap::COL_REGION, CountryTableMap::COL_SURFACEAREA, CountryTableMap::COL_INDEPYEAR, CountryTableMap::COL_POPULATION, CountryTableMap::COL_LIFEEXPECTANCY, CountryTableMap::COL_GNP, CountryTableMap::COL_GNPOLD, CountryTableMap::COL_LOCALNAME, CountryTableMap::COL_GOVERNMENTFORM, CountryTableMap::COL_HEADOFSTATE, CountryTableMap::COL_CAPITAL, CountryTableMap::COL_CODE2, ),
-        self::TYPE_FIELDNAME     => array('Code', 'Name', 'Continent', 'Region', 'SurfaceArea', 'IndepYear', 'Population', 'LifeExpectancy', 'GNP', 'GNPOld', 'LocalName', 'GovernmentForm', 'HeadOfState', 'Capital', 'Code2', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Code', 'Name', 'Continent', 'Region', 'Surfacearea', 'Indepyear', 'Population', 'Lifeexpectancy', 'Gnp', 'Gnpold', 'Localname', 'Governmentform', 'Headofstate', 'Capital', 'Code2', 'Active', ),
+        self::TYPE_CAMELNAME     => array('code', 'name', 'continent', 'region', 'surfacearea', 'indepyear', 'population', 'lifeexpectancy', 'gnp', 'gnpold', 'localname', 'governmentform', 'headofstate', 'capital', 'code2', 'active', ),
+        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE, CountryTableMap::COL_NAME, CountryTableMap::COL_CONTINENT, CountryTableMap::COL_REGION, CountryTableMap::COL_SURFACEAREA, CountryTableMap::COL_INDEPYEAR, CountryTableMap::COL_POPULATION, CountryTableMap::COL_LIFEEXPECTANCY, CountryTableMap::COL_GNP, CountryTableMap::COL_GNPOLD, CountryTableMap::COL_LOCALNAME, CountryTableMap::COL_GOVERNMENTFORM, CountryTableMap::COL_HEADOFSTATE, CountryTableMap::COL_CAPITAL, CountryTableMap::COL_CODE2, CountryTableMap::COL_ACTIVE, ),
+        self::TYPE_FIELDNAME     => array('Code', 'Name', 'Continent', 'Region', 'SurfaceArea', 'IndepYear', 'Population', 'LifeExpectancy', 'GNP', 'GNPOld', 'LocalName', 'GovernmentForm', 'HeadOfState', 'Capital', 'Code2', 'active', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -173,11 +178,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'Surfacearea' => 4, 'Indepyear' => 5, 'Population' => 6, 'Lifeexpectancy' => 7, 'Gnp' => 8, 'Gnpold' => 9, 'Localname' => 10, 'Governmentform' => 11, 'Headofstate' => 12, 'Capital' => 13, 'Code2' => 14, ),
-        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'continent' => 2, 'region' => 3, 'surfacearea' => 4, 'indepyear' => 5, 'population' => 6, 'lifeexpectancy' => 7, 'gnp' => 8, 'gnpold' => 9, 'localname' => 10, 'governmentform' => 11, 'headofstate' => 12, 'capital' => 13, 'code2' => 14, ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE => 0, CountryTableMap::COL_NAME => 1, CountryTableMap::COL_CONTINENT => 2, CountryTableMap::COL_REGION => 3, CountryTableMap::COL_SURFACEAREA => 4, CountryTableMap::COL_INDEPYEAR => 5, CountryTableMap::COL_POPULATION => 6, CountryTableMap::COL_LIFEEXPECTANCY => 7, CountryTableMap::COL_GNP => 8, CountryTableMap::COL_GNPOLD => 9, CountryTableMap::COL_LOCALNAME => 10, CountryTableMap::COL_GOVERNMENTFORM => 11, CountryTableMap::COL_HEADOFSTATE => 12, CountryTableMap::COL_CAPITAL => 13, CountryTableMap::COL_CODE2 => 14, ),
-        self::TYPE_FIELDNAME     => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'SurfaceArea' => 4, 'IndepYear' => 5, 'Population' => 6, 'LifeExpectancy' => 7, 'GNP' => 8, 'GNPOld' => 9, 'LocalName' => 10, 'GovernmentForm' => 11, 'HeadOfState' => 12, 'Capital' => 13, 'Code2' => 14, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'Surfacearea' => 4, 'Indepyear' => 5, 'Population' => 6, 'Lifeexpectancy' => 7, 'Gnp' => 8, 'Gnpold' => 9, 'Localname' => 10, 'Governmentform' => 11, 'Headofstate' => 12, 'Capital' => 13, 'Code2' => 14, 'Active' => 15, ),
+        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'continent' => 2, 'region' => 3, 'surfacearea' => 4, 'indepyear' => 5, 'population' => 6, 'lifeexpectancy' => 7, 'gnp' => 8, 'gnpold' => 9, 'localname' => 10, 'governmentform' => 11, 'headofstate' => 12, 'capital' => 13, 'code2' => 14, 'active' => 15, ),
+        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE => 0, CountryTableMap::COL_NAME => 1, CountryTableMap::COL_CONTINENT => 2, CountryTableMap::COL_REGION => 3, CountryTableMap::COL_SURFACEAREA => 4, CountryTableMap::COL_INDEPYEAR => 5, CountryTableMap::COL_POPULATION => 6, CountryTableMap::COL_LIFEEXPECTANCY => 7, CountryTableMap::COL_GNP => 8, CountryTableMap::COL_GNPOLD => 9, CountryTableMap::COL_LOCALNAME => 10, CountryTableMap::COL_GOVERNMENTFORM => 11, CountryTableMap::COL_HEADOFSTATE => 12, CountryTableMap::COL_CAPITAL => 13, CountryTableMap::COL_CODE2 => 14, CountryTableMap::COL_ACTIVE => 15, ),
+        self::TYPE_FIELDNAME     => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'SurfaceArea' => 4, 'IndepYear' => 5, 'Population' => 6, 'LifeExpectancy' => 7, 'GNP' => 8, 'GNPOld' => 9, 'LocalName' => 10, 'GovernmentForm' => 11, 'HeadOfState' => 12, 'Capital' => 13, 'Code2' => 14, 'active' => 15, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -212,6 +217,7 @@ class CountryTableMap extends TableMap
         $this->addColumn('HeadOfState', 'Headofstate', 'CHAR', false, 60, null);
         $this->addColumn('Capital', 'Capital', 'INTEGER', false, null, null);
         $this->addColumn('Code2', 'Code2', 'CHAR', true, 2, '');
+        $this->addColumn('active', 'Active', 'BOOLEAN', false, 1, true);
     } // initialize()
 
     /**
@@ -368,6 +374,7 @@ class CountryTableMap extends TableMap
             $criteria->addSelectColumn(CountryTableMap::COL_HEADOFSTATE);
             $criteria->addSelectColumn(CountryTableMap::COL_CAPITAL);
             $criteria->addSelectColumn(CountryTableMap::COL_CODE2);
+            $criteria->addSelectColumn(CountryTableMap::COL_ACTIVE);
         } else {
             $criteria->addSelectColumn($alias . '.Code');
             $criteria->addSelectColumn($alias . '.Name');
@@ -384,6 +391,7 @@ class CountryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.HeadOfState');
             $criteria->addSelectColumn($alias . '.Capital');
             $criteria->addSelectColumn($alias . '.Code2');
+            $criteria->addSelectColumn($alias . '.active');
         }
     }
 

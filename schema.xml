@@ -26,6 +26,7 @@
     <column name="HeadOfState" phpName="Headofstate" type="CHAR" size="60"/>
     <column name="Capital" phpName="Capital" type="INTEGER"/>
     <column name="Code2" phpName="Code2" type="CHAR" size="2" required="true" defaultValue=""/>
+    <column name="active" phpName="Active" type="BOOLEAN" size="1" defaultValue="true"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

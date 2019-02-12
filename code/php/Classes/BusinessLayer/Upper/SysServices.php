@@ -28,7 +28,7 @@ abstract class SysServices
 		try {
 			if (!is_array($params)) throw new Exception('SysServices::getCountries() $params must be an array');
 
-			$q = CountryQuery::create()->find();
+			$q = CountryQuery::create()->filterByActive(TRUE)->find();
 
 			$countries = [];
 			foreach ($q as $country) {
