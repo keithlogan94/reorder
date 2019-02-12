@@ -20,6 +20,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/
 use code\php\Classes\BusinessLayer\Upper\AccountMethods;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/AccountServices.php';
 use code\php\Classes\BusinessLayer\Upper\AccountServices;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/NonLoginMethods.php';
+use code\php\Classes\BusinessLayer\Upper\NonLoginMethods;
 
 
 use Exception;
@@ -66,12 +68,12 @@ abstract class SysMethods
             $requestContainsPassword = isset($_POST['reorder_password']) &&
 			is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
 
-			$isRequestToCreateAccount = $_POST['className'] === 'AccountServices' && $_POST['method'] === 'createAccount';
-
-			if (!$isRequestToCreateAccount) {				
+			$isRequestToCreateAccount = $_POST['className'] === 'AccountMethods' && $_POST['method'] === 'createAccount';
+			$isNonLoginService = $_POST['className'] === 'NonLoginMethods';
+			if (!$isRequestToCreateAccount && !$isNonLoginService) {
 				if (!$requestContainsUsername || !$requestContainsPassword) {
 					throw new Exception('user cannot access any method except AccountServices::createAccount ' .
-						'if not providing username and password');
+						' or a Non-Login Service if not providing username and password');
 				}
 				/* if request is not to create an account then 
 				we want to look up the current account 
@@ -117,5 +119,17 @@ abstract class SysMethods
         }
          return SysWrapper::getConfig($params);
     }
+
+    public static function getCountries(&$params)
+    {
+        $res = SysServices::getCountries($params);
+        $json = json_encode($res);
+
+        if (json_last_error()) {
+            throw new Exception(json_last_error_msg());
+        }
+        echo $json;
+    }
+
 
 }

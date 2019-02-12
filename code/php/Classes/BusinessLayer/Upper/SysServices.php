@@ -8,6 +8,9 @@
 
 namespace code\php\Classes\BusinessLayer\Upper;
 
+use Exception;
+use models\models\CountryQuery;
+
 
 abstract class SysServices
 {
@@ -19,5 +22,25 @@ abstract class SysServices
         }
         return preg_match('/^\d\d\d\d-\d\d-\d\d$/', $params['date']) === 1;
     }
+	
+	public static function getCountries($params)
+	{
+		try {
+			if (!is_array($params)) throw new Exception('SysServices::getCountries() $params must be an array');
+
+			$q = CountryQuery::create()->find();
+
+			$countries = [];
+			foreach ($q as $country) {
+			    $countries[] = $country->getName();
+            }
+
+			return $countries;
+
+		} catch (Exception $e) {
+            throw new Exception('SysServices::getCountries() Failed to get countries',1,$e);
+		}
+	}
+	
 
 }
