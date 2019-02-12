@@ -4,6 +4,60 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- city
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `city`;
+
+CREATE TABLE `city`
+(
+    `ID` INTEGER DEFAULT 0 NOT NULL,
+    `Name` CHAR(35) DEFAULT '' NOT NULL,
+    `CountryCode` CHAR(3) DEFAULT '' NOT NULL,
+    `District` CHAR(20) DEFAULT '' NOT NULL,
+    `Population` INTEGER DEFAULT 0 NOT NULL
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- country
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `country`;
+
+CREATE TABLE `country`
+(
+    `Code` CHAR(3) DEFAULT '' NOT NULL,
+    `Name` CHAR(52) DEFAULT '' NOT NULL,
+    `Continent` enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South America') DEFAULT 'Asia' NOT NULL,
+    `Region` CHAR(26) DEFAULT '' NOT NULL,
+    `SurfaceArea` FLOAT(10,2) DEFAULT 0.00 NOT NULL,
+    `IndepYear` SMALLINT,
+    `Population` INTEGER DEFAULT 0 NOT NULL,
+    `LifeExpectancy` FLOAT(3,1),
+    `GNP` FLOAT(10,2),
+    `GNPOld` FLOAT(10,2),
+    `LocalName` CHAR(45) DEFAULT '' NOT NULL,
+    `GovernmentForm` CHAR(45) DEFAULT '' NOT NULL,
+    `HeadOfState` CHAR(60),
+    `Capital` INTEGER,
+    `Code2` CHAR(2) DEFAULT '' NOT NULL
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- countrylanguage
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `countrylanguage`;
+
+CREATE TABLE `countrylanguage`
+(
+    `CountryCode` CHAR(3) DEFAULT '' NOT NULL,
+    `Language` CHAR(30) DEFAULT '' NOT NULL,
+    `IsOfficial` enum('T','F') DEFAULT 'F' NOT NULL,
+    `Percentage` FLOAT(4,1) DEFAULT 0.0 NOT NULL
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- crm_account
 -- ---------------------------------------------------------------------
 

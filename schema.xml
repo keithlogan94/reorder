@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="default" defaultIdMethod="native" namespace="models" defaultPhpNamingMethod="underscore">
+  <table name="city" idMethod="native" phpName="City" namespace="models">
+    <column name="ID" phpName="Id" type="INTEGER" required="true" defaultValue="0"/>
+    <column name="Name" phpName="Name" type="CHAR" size="35" required="true" defaultValue=""/>
+    <column name="CountryCode" phpName="Countrycode" type="CHAR" size="3" required="true" defaultValue=""/>
+    <column name="District" phpName="District" type="CHAR" size="20" required="true" defaultValue=""/>
+    <column name="Population" phpName="Population" type="INTEGER" required="true" defaultValue="0"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="country" idMethod="native" phpName="Country" namespace="models">
+    <column name="Code" phpName="Code" type="CHAR" size="3" required="true" defaultValue=""/>
+    <column name="Name" phpName="Name" type="CHAR" size="52" required="true" defaultValue=""/>
+    <column name="Continent" phpName="Continent" type="CHAR" sqlType="enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South America')" required="true" defaultValue="Asia"/>
+    <column name="Region" phpName="Region" type="CHAR" size="26" required="true" defaultValue=""/>
+    <column name="SurfaceArea" phpName="Surfacearea" type="FLOAT" size="10" scale="2" required="true" defaultValue="0.00"/>
+    <column name="IndepYear" phpName="Indepyear" type="SMALLINT"/>
+    <column name="Population" phpName="Population" type="INTEGER" required="true" defaultValue="0"/>
+    <column name="LifeExpectancy" phpName="Lifeexpectancy" type="FLOAT" size="3" scale="1"/>
+    <column name="GNP" phpName="Gnp" type="FLOAT" size="10" scale="2"/>
+    <column name="GNPOld" phpName="Gnpold" type="FLOAT" size="10" scale="2"/>
+    <column name="LocalName" phpName="Localname" type="CHAR" size="45" required="true" defaultValue=""/>
+    <column name="GovernmentForm" phpName="Governmentform" type="CHAR" size="45" required="true" defaultValue=""/>
+    <column name="HeadOfState" phpName="Headofstate" type="CHAR" size="60"/>
+    <column name="Capital" phpName="Capital" type="INTEGER"/>
+    <column name="Code2" phpName="Code2" type="CHAR" size="2" required="true" defaultValue=""/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="countrylanguage" idMethod="native" phpName="Countrylanguage" namespace="models">
+    <column name="CountryCode" phpName="Countrycode" type="CHAR" size="3" required="true" defaultValue=""/>
+    <column name="Language" phpName="Language" type="CHAR" size="30" required="true" defaultValue=""/>
+    <column name="IsOfficial" phpName="Isofficial" type="CHAR" sqlType="enum('T','F')" required="true" defaultValue="F"/>
+    <column name="Percentage" phpName="Percentage" type="FLOAT" size="4" scale="1" required="true" defaultValue="0.0"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="crm_account" idMethod="native" phpName="CrmAccount" namespace="models">
     <column name="crm_account_id" phpName="CrmAccountId" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="add_time" phpName="AddTime" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
