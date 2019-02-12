@@ -32,7 +32,9 @@ abstract class SysServices
 
 			$countries = [];
 			foreach ($q as $country) {
-			    $countries[] = $country->getName();
+			    $countries[] = [
+			        'name' => $country->getName()
+                ];
             }
 
 			return $countries;
