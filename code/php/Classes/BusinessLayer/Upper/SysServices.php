@@ -23,7 +23,17 @@ abstract class SysServices
         }
         return preg_match('/^\d\d\d\d-\d\d-\d\d$/', $params['date']) === 1;
     }
-	
+
+    public static function getCityStateCountryHtmlFromZip($params)
+    {
+        if (!isset($params['zip'])) throw new Exception('zip not found');
+
+        $html = <<<HTML
+								  
+HTML;
+
+    }
+
 	public static function getCountries($params)
 	{
 		try {

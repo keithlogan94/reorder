@@ -18,6 +18,10 @@ class DataWrapper
     const PASSWORD = 'c4hahaven%jkb72rAs';
     const HOST = 'localhost';
 
+    const MODE_GET_ALL_ROWS = 1;
+    const MODE_GET_SINGLE_ROW = 2;
+    const MODE_GET_RESULT = 3;
+
     public static function query($params)
     {
         if (!is_array($params)) {
@@ -41,21 +45,21 @@ class DataWrapper
 
         if ($result === TRUE) return true;
 
-        if (!isset($params['mode'])) $params['mode'] = 'getAllRows';
+        if (!isset($params['mode'])) $params['mode'] = self::MODE_GET_ALL_ROWS;
 
         $return = null;
         switch ($params['mode']) {
-            case 'getSingleRow':
+            case self::MODE_GET_SINGLE_ROW:
                 $return = mysqli_fetch_assoc($result);
                 break;
-            case 'getAllRows':
+            case self::MODE_GET_ALL_ROWS:
                 $rows = [];
                 while ($row = mysqli_fetch_assoc($result)) {
                     $rows[] = $row;
                 }
                 $return =  $rows;
                 break;
-            case 'getResult':
+            case self::MODE_GET_RESULT:
                 $return = $result;
                 break;
             default:
