@@ -15,6 +15,22 @@ use Exception;
 class NonLoginMethods
 {
 
+    public static function getCityStateCountryHtmlFromZip($params)
+    {
+        try {
+            $res = SysServices::getCityStateCountryHtmlFromZip($params);
+            $json = json_encode($res);
+
+            if (json_last_error()) {
+                throw new Exception(json_last_error_msg());
+            }
+            echo $json;
+
+        } catch (Exception $e) {
+            throw new Exception('NonLoginMethods::getCityStateCountryHtmlFromZip() Failed to get html', 1, $e);
+        }
+    }
+
     public static function getCountries($params)
     {
         try {

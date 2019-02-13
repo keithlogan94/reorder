@@ -12,6 +12,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/Data
 use code\php\Classes\DataLayer\Upper\DataWrapper;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/CountrySelectHtml.php';
 use code\php\Classes\BusinessLayer\Upper\CountrySelectHtml;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/StateSelectHtml.php';
+use code\php\Classes\BusinessLayer\Upper\StateSelectHtml;
 
 
 class Zip
@@ -33,6 +35,8 @@ class Zip
     {
         $countryHtml = new \code\php\Classes\BusinessLayer\Upper\CountrySelectHtml($this->country);
         $countryHtml = $countryHtml->getHtml();
+        $stateHtml = new StateSelectHtml($this->state);
+        $stateHtml = $stateHtml->getHtml();
         $html = <<<HTML
             <div class="form-group col-md-4">
                   <label>Country</label>
@@ -43,6 +47,7 @@ class Zip
               <div class="form-group col-md-4">
                   <label for="inputState">State</label>
                   <div class="state-container">
+                  $stateHtml
                   </div>
               </div>
               <div class="form-group col-md-6">
@@ -50,6 +55,8 @@ class Zip
                   <input type="text" class="form-control" id="inputCity">
               </div>
 HTML;
+
+        return $html;   
 
     }
 

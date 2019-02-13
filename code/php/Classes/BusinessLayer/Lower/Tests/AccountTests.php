@@ -8,8 +8,6 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Account.php';
 use code\php\Classes\BusinessLayer\Upper\Account;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/CountrySelectHtml.php';
-use code\php\Classes\BusinessLayer\Upper\CountrySelectHtml;
 
 class AccountTests
 {
@@ -382,16 +380,5 @@ class AccountTests
         echo $account->getAmazonLogin()->getData()->getLoginEmail();
         echo $account->getAmazonLogin()->getData()->getLoginPassword();
     }
-
-
-    public function testCountrySelectHtml()
-    {
-
-        $zip = new \code\php\Classes\BusinessLayer\Upper\CountrySelectHtml('United States');
-        echo $zip->getHtml();
-
-
-    }
-
 
 }

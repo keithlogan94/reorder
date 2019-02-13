@@ -34,7 +34,7 @@ abstract class SelectBuilder
             $options .= '<option value="'.$this->getOptionValue().'" '.$s.'>'.$this->getOptionContent().'</option>';
             $this->next();
         }
-        return '<select class="'.$this->getSelectClasses().'">'.$options.'</select>';
+        return '<select class="form-control '.$this->getSelectClasses().'">'.$options.'</select>';
     }
 
 }

@@ -28,9 +28,11 @@ abstract class SysServices
     {
         if (!isset($params['zip'])) throw new Exception('zip not found');
 
-        $html = <<<HTML
-								  
-HTML;
+        $zip = new Zip($params['zip']);
+
+        return [
+            'html' => $zip->getCityStateCountryHTML()
+        ];
 
     }
 
