@@ -10,6 +10,8 @@ namespace code\php\Classes\BusinessLayer\Upper;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/DataWrapper.php';
 use code\php\Classes\DataLayer\Upper\DataWrapper;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/Zip.php';
+use code\php\Classes\BusinessLayer\Upper\Zip;
 use Exception;
 
 
