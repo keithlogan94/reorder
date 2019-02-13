@@ -23,11 +23,20 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/SysMethods.php';
 use code\php\Classes\BusinessLayer\Upper\SysMethods;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Lower/TestMode.php';
+use code\php\Classes\BusinessLayer\Upper\TestMode;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/DataWrapper.php';
+use code\php\Classes\DataLayer\Upper\DataWrapper;
 
 try {
     SysMethods::handleRequest();
 } catch (Exception $e) {
     http_response_code(500);
+
+    //if test mode is not enabled then dont show error messages
+    $testMode = new TestMode();
+    if (!$testMode->isEnabled()) exit;
+
 	$errorMessages = [];
 	do {
 		$errorMessages[] = $e->getMessage();
@@ -39,8 +48,19 @@ try {
 	} else {
 		$res = json_encode(['errors'=>$errorMessages]);	
 	}
-	
+
+	//log errors to database
+    $errorLog = [
+        'input' => $_POST,
+        'exceptionMessages' => $errorMessages
+    ];
+	$errorLog = json_encode($errorLog);
+	if (json_last_error() !== JSON_ERROR_NONE) $errorLog = 'json_encode error: ' . json_last_error_msg();
+    DataWrapper::query([
+        'sql' => "INSERT INTO error_log (json_error) VALUES ('$errorLog');"
+    ]);
+
     if (json_last_error() !== JSON_ERROR_NONE) exit('error: ' . json_last_error_msg());
-	
+
     exit($res);
 }
