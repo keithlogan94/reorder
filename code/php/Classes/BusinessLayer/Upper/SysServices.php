@@ -45,7 +45,7 @@ abstract class SysServices
 
 			$counties = DataWrapper::query([
 			    'sql' => 'SELECT * FROM country',
-                'mode' => 'getAllRows'
+                'mode' => DataWrapper::MODE_GET_ALL_ROWS
             ]);
 
 			$return = [];
