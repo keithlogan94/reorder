@@ -130,52 +130,53 @@ abstract class SysMethods
 
     public static function validateInput($params)
     {
-        if (!isset($params['input'])) throw new Exception('SysMethods::validateInput() input must be passed into params');
+        try {
+            if (!isset($params['input'])) throw new Exception('SysMethods::validateInput() input must be passed into params');
+            $returnArr = [];
+            foreach ($params['input'] as $key => $value) {
+                if (is_array($value)) throw new Exception('SysMethods::validateInput() value of input must not be an array');
 
-        $returnArr = [];
+                $row = DataWrapper::query([
+                    'sql' => "SELECT * FROM input_validation WHERE allowed_key = '$key';",
+                    'mode' => DataWrapper::MODE_GET_SINGLE_ROW
+                ]);
 
-        foreach ($params['input'] as $key => $value) {
-            if (is_array($value)) throw new Exception('SysMethods::validateInput() value of input must not be an array');
+                if ($row === false) {
+                    throw new Exception('SysMethods::validateInput() Failed to find allowed_key for ' . $key);
+                }
 
-            $row = DataWrapper::query([
-                'sql' => "SELECT * FROM input_validation WHERE allowed_key = '$key';",
-                'mode' => DataWrapper::MODE_GET_SINGLE_ROW
-            ]);
+                $validationType = $row['validation_type'];
+                $regex = $row['regex'];
 
-            if ($row === false) {
-                throw new Exception('SysMethods::validateInput() Failed to find allowed_key for ' . $key);
+                switch ($validationType) {
+                    case 'regex':
+                        if (preg_match('/' . $regex . '/', $value) !== 1) {
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . ' with value ' . $value);
+                        }
+                        $returnArr[$key] = $value;
+                        break;
+                    case 'email':
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            throw new Exception('SysMethods::validateInput() Failed to pass email validation for input ' . $key . ' with value ' . $value);
+                        }
+                        $returnArr[$key] = $value;
+                        break;
+                    case 'float':
+                        if (is_numeric($value))
+                            $returnArr[$key] = (float)$value;
+                        else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        break;
+                    case 'int':
+                        if (is_numeric($value))
+                            $returnArr[$key] = (int)$value;
+                        else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        break;
+                }
             }
-
-            $validationType = $row['validation_type'];
-            $regex = $row['regex'];
-
-            switch ($validationType) {
-                case 'regex':
-                    if (preg_match('/'.$regex.'/',$value) !== 1) {
-                        throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . ' with value ' . $value);
-                    }
-                    $returnArr[$key] = $value;
-                    break;
-                case 'email':
-                    if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                        throw new Exception('SysMethods::validateInput() Failed to pass email validation for input ' . $key . ' with value ' . $value);
-                    }
-                    $returnArr[$key] = $value;
-                    break;
-                case 'float':
-                    if (is_numeric($value))
-                        $returnArr[$key] = (float)$value;
-                    else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
-                    break;
-                case 'int':
-                    if (is_numeric($value))
-                        $returnArr[$key] = (int)$value;
-                    else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
-                    break;
-            }
+            return $returnArr;
+        } catch (Exception $e) {
+            throw new Exception('SysMethods::validateInput() Failed to validate input',1,$e);
         }
-
-        return $returnArr;
     }
 
     public static function getConfig($params)
