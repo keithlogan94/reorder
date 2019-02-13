@@ -14,6 +14,11 @@ use Exception;
 abstract class SysWrapper
 {
 
+    public static function query($params)
+    {
+
+    }
+
     public static function getConfig($params)
     {
         if (!isset($params['key']) && !isset($params['description'])) {

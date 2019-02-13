@@ -12,12 +12,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use models\models\Country;
-use models\models\CountryQuery;
+use models\models\CrmCountry;
+use models\models\CrmCountryQuery;
 
 
 /**
- * This class defines the structure of the 'country' table.
+ * This class defines the structure of the 'crm_country' table.
  *
  *
  *
@@ -27,7 +27,7 @@ use models\models\CountryQuery;
  * (i.e. if it's a text column type).
  *
  */
-class CountryTableMap extends TableMap
+class CrmCountryTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -35,7 +35,7 @@ class CountryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'models.models.Map.CountryTableMap';
+    const CLASS_NAME = 'models.models.Map.CrmCountryTableMap';
 
     /**
      * The default database name for this class
@@ -45,22 +45,22 @@ class CountryTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'country';
+    const TABLE_NAME = 'crm_country';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\models\\models\\Country';
+    const OM_CLASS = '\\models\\models\\CrmCountry';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'models.models.Country';
+    const CLASS_DEFAULT = 'models.models.CrmCountry';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -70,87 +70,27 @@ class CountryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 16;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
-     * the column name for the Code field
+     * the column name for the name field
      */
-    const COL_CODE = 'country.Code';
+    const COL_NAME = 'crm_country.name';
 
     /**
-     * the column name for the Name field
+     * the column name for the continent field
      */
-    const COL_NAME = 'country.Name';
+    const COL_CONTINENT = 'crm_country.continent';
 
     /**
-     * the column name for the Continent field
+     * the column name for the region field
      */
-    const COL_CONTINENT = 'country.Continent';
-
-    /**
-     * the column name for the Region field
-     */
-    const COL_REGION = 'country.Region';
-
-    /**
-     * the column name for the SurfaceArea field
-     */
-    const COL_SURFACEAREA = 'country.SurfaceArea';
-
-    /**
-     * the column name for the IndepYear field
-     */
-    const COL_INDEPYEAR = 'country.IndepYear';
-
-    /**
-     * the column name for the Population field
-     */
-    const COL_POPULATION = 'country.Population';
-
-    /**
-     * the column name for the LifeExpectancy field
-     */
-    const COL_LIFEEXPECTANCY = 'country.LifeExpectancy';
-
-    /**
-     * the column name for the GNP field
-     */
-    const COL_GNP = 'country.GNP';
-
-    /**
-     * the column name for the GNPOld field
-     */
-    const COL_GNPOLD = 'country.GNPOld';
-
-    /**
-     * the column name for the LocalName field
-     */
-    const COL_LOCALNAME = 'country.LocalName';
-
-    /**
-     * the column name for the GovernmentForm field
-     */
-    const COL_GOVERNMENTFORM = 'country.GovernmentForm';
-
-    /**
-     * the column name for the HeadOfState field
-     */
-    const COL_HEADOFSTATE = 'country.HeadOfState';
-
-    /**
-     * the column name for the Capital field
-     */
-    const COL_CAPITAL = 'country.Capital';
-
-    /**
-     * the column name for the Code2 field
-     */
-    const COL_CODE2 = 'country.Code2';
+    const COL_REGION = 'crm_country.region';
 
     /**
      * the column name for the active field
      */
-    const COL_ACTIVE = 'country.active';
+    const COL_ACTIVE = 'crm_country.active';
 
     /**
      * The default string format for model objects of the related table
@@ -164,11 +104,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Code', 'Name', 'Continent', 'Region', 'Surfacearea', 'Indepyear', 'Population', 'Lifeexpectancy', 'Gnp', 'Gnpold', 'Localname', 'Governmentform', 'Headofstate', 'Capital', 'Code2', 'Active', ),
-        self::TYPE_CAMELNAME     => array('code', 'name', 'continent', 'region', 'surfacearea', 'indepyear', 'population', 'lifeexpectancy', 'gnp', 'gnpold', 'localname', 'governmentform', 'headofstate', 'capital', 'code2', 'active', ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE, CountryTableMap::COL_NAME, CountryTableMap::COL_CONTINENT, CountryTableMap::COL_REGION, CountryTableMap::COL_SURFACEAREA, CountryTableMap::COL_INDEPYEAR, CountryTableMap::COL_POPULATION, CountryTableMap::COL_LIFEEXPECTANCY, CountryTableMap::COL_GNP, CountryTableMap::COL_GNPOLD, CountryTableMap::COL_LOCALNAME, CountryTableMap::COL_GOVERNMENTFORM, CountryTableMap::COL_HEADOFSTATE, CountryTableMap::COL_CAPITAL, CountryTableMap::COL_CODE2, CountryTableMap::COL_ACTIVE, ),
-        self::TYPE_FIELDNAME     => array('Code', 'Name', 'Continent', 'Region', 'SurfaceArea', 'IndepYear', 'Population', 'LifeExpectancy', 'GNP', 'GNPOld', 'LocalName', 'GovernmentForm', 'HeadOfState', 'Capital', 'Code2', 'active', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        self::TYPE_PHPNAME       => array('Name', 'Continent', 'Region', 'Active', ),
+        self::TYPE_CAMELNAME     => array('name', 'continent', 'region', 'active', ),
+        self::TYPE_COLNAME       => array(CrmCountryTableMap::COL_NAME, CrmCountryTableMap::COL_CONTINENT, CrmCountryTableMap::COL_REGION, CrmCountryTableMap::COL_ACTIVE, ),
+        self::TYPE_FIELDNAME     => array('name', 'continent', 'region', 'active', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -178,11 +118,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'Surfacearea' => 4, 'Indepyear' => 5, 'Population' => 6, 'Lifeexpectancy' => 7, 'Gnp' => 8, 'Gnpold' => 9, 'Localname' => 10, 'Governmentform' => 11, 'Headofstate' => 12, 'Capital' => 13, 'Code2' => 14, 'Active' => 15, ),
-        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'continent' => 2, 'region' => 3, 'surfacearea' => 4, 'indepyear' => 5, 'population' => 6, 'lifeexpectancy' => 7, 'gnp' => 8, 'gnpold' => 9, 'localname' => 10, 'governmentform' => 11, 'headofstate' => 12, 'capital' => 13, 'code2' => 14, 'active' => 15, ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_CODE => 0, CountryTableMap::COL_NAME => 1, CountryTableMap::COL_CONTINENT => 2, CountryTableMap::COL_REGION => 3, CountryTableMap::COL_SURFACEAREA => 4, CountryTableMap::COL_INDEPYEAR => 5, CountryTableMap::COL_POPULATION => 6, CountryTableMap::COL_LIFEEXPECTANCY => 7, CountryTableMap::COL_GNP => 8, CountryTableMap::COL_GNPOLD => 9, CountryTableMap::COL_LOCALNAME => 10, CountryTableMap::COL_GOVERNMENTFORM => 11, CountryTableMap::COL_HEADOFSTATE => 12, CountryTableMap::COL_CAPITAL => 13, CountryTableMap::COL_CODE2 => 14, CountryTableMap::COL_ACTIVE => 15, ),
-        self::TYPE_FIELDNAME     => array('Code' => 0, 'Name' => 1, 'Continent' => 2, 'Region' => 3, 'SurfaceArea' => 4, 'IndepYear' => 5, 'Population' => 6, 'LifeExpectancy' => 7, 'GNP' => 8, 'GNPOld' => 9, 'LocalName' => 10, 'GovernmentForm' => 11, 'HeadOfState' => 12, 'Capital' => 13, 'Code2' => 14, 'active' => 15, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        self::TYPE_PHPNAME       => array('Name' => 0, 'Continent' => 1, 'Region' => 2, 'Active' => 3, ),
+        self::TYPE_CAMELNAME     => array('name' => 0, 'continent' => 1, 'region' => 2, 'active' => 3, ),
+        self::TYPE_COLNAME       => array(CrmCountryTableMap::COL_NAME => 0, CrmCountryTableMap::COL_CONTINENT => 1, CrmCountryTableMap::COL_REGION => 2, CrmCountryTableMap::COL_ACTIVE => 3, ),
+        self::TYPE_FIELDNAME     => array('name' => 0, 'continent' => 1, 'region' => 2, 'active' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -195,29 +135,17 @@ class CountryTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('country');
-        $this->setPhpName('Country');
+        $this->setName('crm_country');
+        $this->setPhpName('CrmCountry');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\models\\models\\Country');
+        $this->setClassName('\\models\\models\\CrmCountry');
         $this->setPackage('models.models');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addColumn('Code', 'Code', 'CHAR', true, 3, '');
-        $this->addColumn('Name', 'Name', 'CHAR', true, 52, '');
-        $this->addColumn('Continent', 'Continent', 'CHAR', true, null, 'Asia');
-        $this->addColumn('Region', 'Region', 'CHAR', true, 26, '');
-        $this->addColumn('SurfaceArea', 'Surfacearea', 'FLOAT', true, 10, 0);
-        $this->addColumn('IndepYear', 'Indepyear', 'SMALLINT', false, null, null);
-        $this->addColumn('Population', 'Population', 'INTEGER', true, null, 0);
-        $this->addColumn('LifeExpectancy', 'Lifeexpectancy', 'FLOAT', false, 3, null);
-        $this->addColumn('GNP', 'Gnp', 'FLOAT', false, 10, null);
-        $this->addColumn('GNPOld', 'Gnpold', 'FLOAT', false, 10, null);
-        $this->addColumn('LocalName', 'Localname', 'CHAR', true, 45, '');
-        $this->addColumn('GovernmentForm', 'Governmentform', 'CHAR', true, 45, '');
-        $this->addColumn('HeadOfState', 'Headofstate', 'CHAR', false, 60, null);
-        $this->addColumn('Capital', 'Capital', 'INTEGER', false, null, null);
-        $this->addColumn('Code2', 'Code2', 'CHAR', true, 2, '');
-        $this->addColumn('active', 'Active', 'BOOLEAN', false, 1, true);
+        $this->addColumn('name', 'Name', 'VARCHAR', false, 100, null);
+        $this->addColumn('continent', 'Continent', 'VARCHAR', false, 100, null);
+        $this->addColumn('region', 'Region', 'VARCHAR', false, 100, null);
+        $this->addColumn('active', 'Active', 'BOOLEAN', false, 1, null);
     } // initialize()
 
     /**
@@ -275,7 +203,7 @@ class CountryTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? CountryTableMap::CLASS_DEFAULT : CountryTableMap::OM_CLASS;
+        return $withPrefix ? CrmCountryTableMap::CLASS_DEFAULT : CrmCountryTableMap::OM_CLASS;
     }
 
     /**
@@ -289,22 +217,22 @@ class CountryTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Country object, last column rank)
+     * @return array           (CrmCountry object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = CountryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = CountryTableMap::getInstanceFromPool($key))) {
+        $key = CrmCountryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = CrmCountryTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + CountryTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + CrmCountryTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = CountryTableMap::OM_CLASS;
-            /** @var Country $obj */
+            $cls = CrmCountryTableMap::OM_CLASS;
+            /** @var CrmCountry $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            CountryTableMap::addInstanceToPool($obj, $key);
+            CrmCountryTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -327,18 +255,18 @@ class CountryTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = CountryTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = CountryTableMap::getInstanceFromPool($key))) {
+            $key = CrmCountryTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = CrmCountryTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Country $obj */
+                /** @var CrmCountry $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                CountryTableMap::addInstanceToPool($obj, $key);
+                CrmCountryTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -359,38 +287,14 @@ class CountryTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(CountryTableMap::COL_CODE);
-            $criteria->addSelectColumn(CountryTableMap::COL_NAME);
-            $criteria->addSelectColumn(CountryTableMap::COL_CONTINENT);
-            $criteria->addSelectColumn(CountryTableMap::COL_REGION);
-            $criteria->addSelectColumn(CountryTableMap::COL_SURFACEAREA);
-            $criteria->addSelectColumn(CountryTableMap::COL_INDEPYEAR);
-            $criteria->addSelectColumn(CountryTableMap::COL_POPULATION);
-            $criteria->addSelectColumn(CountryTableMap::COL_LIFEEXPECTANCY);
-            $criteria->addSelectColumn(CountryTableMap::COL_GNP);
-            $criteria->addSelectColumn(CountryTableMap::COL_GNPOLD);
-            $criteria->addSelectColumn(CountryTableMap::COL_LOCALNAME);
-            $criteria->addSelectColumn(CountryTableMap::COL_GOVERNMENTFORM);
-            $criteria->addSelectColumn(CountryTableMap::COL_HEADOFSTATE);
-            $criteria->addSelectColumn(CountryTableMap::COL_CAPITAL);
-            $criteria->addSelectColumn(CountryTableMap::COL_CODE2);
-            $criteria->addSelectColumn(CountryTableMap::COL_ACTIVE);
+            $criteria->addSelectColumn(CrmCountryTableMap::COL_NAME);
+            $criteria->addSelectColumn(CrmCountryTableMap::COL_CONTINENT);
+            $criteria->addSelectColumn(CrmCountryTableMap::COL_REGION);
+            $criteria->addSelectColumn(CrmCountryTableMap::COL_ACTIVE);
         } else {
-            $criteria->addSelectColumn($alias . '.Code');
-            $criteria->addSelectColumn($alias . '.Name');
-            $criteria->addSelectColumn($alias . '.Continent');
-            $criteria->addSelectColumn($alias . '.Region');
-            $criteria->addSelectColumn($alias . '.SurfaceArea');
-            $criteria->addSelectColumn($alias . '.IndepYear');
-            $criteria->addSelectColumn($alias . '.Population');
-            $criteria->addSelectColumn($alias . '.LifeExpectancy');
-            $criteria->addSelectColumn($alias . '.GNP');
-            $criteria->addSelectColumn($alias . '.GNPOld');
-            $criteria->addSelectColumn($alias . '.LocalName');
-            $criteria->addSelectColumn($alias . '.GovernmentForm');
-            $criteria->addSelectColumn($alias . '.HeadOfState');
-            $criteria->addSelectColumn($alias . '.Capital');
-            $criteria->addSelectColumn($alias . '.Code2');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.continent');
+            $criteria->addSelectColumn($alias . '.region');
             $criteria->addSelectColumn($alias . '.active');
         }
     }
@@ -404,7 +308,7 @@ class CountryTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(CountryTableMap::DATABASE_NAME)->getTable(CountryTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(CrmCountryTableMap::DATABASE_NAME)->getTable(CrmCountryTableMap::TABLE_NAME);
     }
 
     /**
@@ -412,16 +316,16 @@ class CountryTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CountryTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CountryTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CountryTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CrmCountryTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(CrmCountryTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new CrmCountryTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Country or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a CrmCountry or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Country object or primary key or array of primary keys
+     * @param mixed               $values Criteria or CrmCountry object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -432,26 +336,26 @@ class CountryTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CrmCountryTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \models\models\Country) { // it's a model object
+        } elseif ($values instanceof \models\models\CrmCountry) { // it's a model object
             // create criteria based on pk value
             $criteria = $values->buildCriteria();
         } else { // it's a primary key, or an array of pks
-            throw new LogicException('The Country object has no primary key');
+            throw new LogicException('The CrmCountry object has no primary key');
         }
 
-        $query = CountryQuery::create()->mergeWith($criteria);
+        $query = CrmCountryQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            CountryTableMap::clearInstancePool();
+            CrmCountryTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                CountryTableMap::removeInstanceFromPool($singleval);
+                CrmCountryTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -459,20 +363,20 @@ class CountryTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the country table.
+     * Deletes all rows from the crm_country table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return CountryQuery::create()->doDeleteAll($con);
+        return CrmCountryQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Country or Criteria object.
+     * Performs an INSERT on the database, given a CrmCountry or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Country object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or CrmCountry object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -481,18 +385,18 @@ class CountryTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CrmCountryTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Country object
+            $criteria = $criteria->buildCriteria(); // build Criteria from CrmCountry object
         }
 
 
         // Set the correct dbName
-        $query = CountryQuery::create()->mergeWith($criteria);
+        $query = CrmCountryQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -501,7 +405,7 @@ class CountryTableMap extends TableMap
         });
     }
 
-} // CountryTableMap
+} // CrmCountryTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-CountryTableMap::buildTableMap();
+CrmCountryTableMap::buildTableMap();

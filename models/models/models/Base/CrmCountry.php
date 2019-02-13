@@ -15,22 +15,22 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
-use models\models\CountryQuery as ChildCountryQuery;
-use models\models\Map\CountryTableMap;
+use models\models\CrmCountryQuery as ChildCrmCountryQuery;
+use models\models\Map\CrmCountryTableMap;
 
 /**
- * Base class that represents a row from the 'country' table.
+ * Base class that represents a row from the 'crm_country' table.
  *
  *
  *
  * @package    propel.generator.models.models.Base
  */
-abstract class Country implements ActiveRecordInterface
+abstract class CrmCountry implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\models\\models\\Map\\CountryTableMap';
+    const TABLE_MAP = '\\models\\models\\Map\\CrmCountryTableMap';
 
 
     /**
@@ -60,17 +60,8 @@ abstract class Country implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the code field.
-     *
-     * Note: this column has a database default value of: ''
-     * @var        string
-     */
-    protected $code;
-
-    /**
      * The value for the name field.
      *
-     * Note: this column has a database default value of: ''
      * @var        string
      */
     protected $name;
@@ -78,7 +69,6 @@ abstract class Country implements ActiveRecordInterface
     /**
      * The value for the continent field.
      *
-     * Note: this column has a database default value of: 'Asia'
      * @var        string
      */
     protected $continent;
@@ -86,97 +76,13 @@ abstract class Country implements ActiveRecordInterface
     /**
      * The value for the region field.
      *
-     * Note: this column has a database default value of: ''
      * @var        string
      */
     protected $region;
 
     /**
-     * The value for the surfacearea field.
-     *
-     * Note: this column has a database default value of: 0.0
-     * @var        double
-     */
-    protected $surfacearea;
-
-    /**
-     * The value for the indepyear field.
-     *
-     * @var        int
-     */
-    protected $indepyear;
-
-    /**
-     * The value for the population field.
-     *
-     * Note: this column has a database default value of: 0
-     * @var        int
-     */
-    protected $population;
-
-    /**
-     * The value for the lifeexpectancy field.
-     *
-     * @var        double
-     */
-    protected $lifeexpectancy;
-
-    /**
-     * The value for the gnp field.
-     *
-     * @var        double
-     */
-    protected $gnp;
-
-    /**
-     * The value for the gnpold field.
-     *
-     * @var        double
-     */
-    protected $gnpold;
-
-    /**
-     * The value for the localname field.
-     *
-     * Note: this column has a database default value of: ''
-     * @var        string
-     */
-    protected $localname;
-
-    /**
-     * The value for the governmentform field.
-     *
-     * Note: this column has a database default value of: ''
-     * @var        string
-     */
-    protected $governmentform;
-
-    /**
-     * The value for the headofstate field.
-     *
-     * @var        string
-     */
-    protected $headofstate;
-
-    /**
-     * The value for the capital field.
-     *
-     * @var        int
-     */
-    protected $capital;
-
-    /**
-     * The value for the code2 field.
-     *
-     * Note: this column has a database default value of: ''
-     * @var        string
-     */
-    protected $code2;
-
-    /**
      * The value for the active field.
      *
-     * Note: this column has a database default value of: true
      * @var        boolean
      */
     protected $active;
@@ -190,32 +96,10 @@ abstract class Country implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->code = '';
-        $this->name = '';
-        $this->continent = 'Asia';
-        $this->region = '';
-        $this->surfacearea = 0.0;
-        $this->population = 0;
-        $this->localname = '';
-        $this->governmentform = '';
-        $this->code2 = '';
-        $this->active = true;
-    }
-
-    /**
-     * Initializes internal state of models\models\Base\Country object.
-     * @see applyDefaults()
+     * Initializes internal state of models\models\Base\CrmCountry object.
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -307,9 +191,9 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Country</code> instance.  If
-     * <code>obj</code> is an instance of <code>Country</code>, delegates to
-     * <code>equals(Country)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>CrmCountry</code> instance.  If
+     * <code>obj</code> is an instance of <code>CrmCountry</code>, delegates to
+     * <code>equals(CrmCountry)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -375,7 +259,7 @@ abstract class Country implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Country The current object, for fluid interface
+     * @return $this|CrmCountry The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -437,16 +321,6 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Get the [code] column value.
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
      * Get the [name] column value.
      *
      * @return string
@@ -477,116 +351,6 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Get the [surfacearea] column value.
-     *
-     * @return double
-     */
-    public function getSurfacearea()
-    {
-        return $this->surfacearea;
-    }
-
-    /**
-     * Get the [indepyear] column value.
-     *
-     * @return int
-     */
-    public function getIndepyear()
-    {
-        return $this->indepyear;
-    }
-
-    /**
-     * Get the [population] column value.
-     *
-     * @return int
-     */
-    public function getPopulation()
-    {
-        return $this->population;
-    }
-
-    /**
-     * Get the [lifeexpectancy] column value.
-     *
-     * @return double
-     */
-    public function getLifeexpectancy()
-    {
-        return $this->lifeexpectancy;
-    }
-
-    /**
-     * Get the [gnp] column value.
-     *
-     * @return double
-     */
-    public function getGnp()
-    {
-        return $this->gnp;
-    }
-
-    /**
-     * Get the [gnpold] column value.
-     *
-     * @return double
-     */
-    public function getGnpold()
-    {
-        return $this->gnpold;
-    }
-
-    /**
-     * Get the [localname] column value.
-     *
-     * @return string
-     */
-    public function getLocalname()
-    {
-        return $this->localname;
-    }
-
-    /**
-     * Get the [governmentform] column value.
-     *
-     * @return string
-     */
-    public function getGovernmentform()
-    {
-        return $this->governmentform;
-    }
-
-    /**
-     * Get the [headofstate] column value.
-     *
-     * @return string
-     */
-    public function getHeadofstate()
-    {
-        return $this->headofstate;
-    }
-
-    /**
-     * Get the [capital] column value.
-     *
-     * @return int
-     */
-    public function getCapital()
-    {
-        return $this->capital;
-    }
-
-    /**
-     * Get the [code2] column value.
-     *
-     * @return string
-     */
-    public function getCode2()
-    {
-        return $this->code2;
-    }
-
-    /**
      * Get the [active] column value.
      *
      * @return boolean
@@ -607,30 +371,10 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [code] column.
-     *
-     * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setCode($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->code !== $v) {
-            $this->code = $v;
-            $this->modifiedColumns[CountryTableMap::COL_CODE] = true;
-        }
-
-        return $this;
-    } // setCode()
-
-    /**
      * Set the value of [name] column.
      *
      * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
+     * @return $this|\models\models\CrmCountry The current object (for fluent API support)
      */
     public function setName($v)
     {
@@ -640,7 +384,7 @@ abstract class Country implements ActiveRecordInterface
 
         if ($this->name !== $v) {
             $this->name = $v;
-            $this->modifiedColumns[CountryTableMap::COL_NAME] = true;
+            $this->modifiedColumns[CrmCountryTableMap::COL_NAME] = true;
         }
 
         return $this;
@@ -650,7 +394,7 @@ abstract class Country implements ActiveRecordInterface
      * Set the value of [continent] column.
      *
      * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
+     * @return $this|\models\models\CrmCountry The current object (for fluent API support)
      */
     public function setContinent($v)
     {
@@ -660,7 +404,7 @@ abstract class Country implements ActiveRecordInterface
 
         if ($this->continent !== $v) {
             $this->continent = $v;
-            $this->modifiedColumns[CountryTableMap::COL_CONTINENT] = true;
+            $this->modifiedColumns[CrmCountryTableMap::COL_CONTINENT] = true;
         }
 
         return $this;
@@ -670,7 +414,7 @@ abstract class Country implements ActiveRecordInterface
      * Set the value of [region] column.
      *
      * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
+     * @return $this|\models\models\CrmCountry The current object (for fluent API support)
      */
     public function setRegion($v)
     {
@@ -680,231 +424,11 @@ abstract class Country implements ActiveRecordInterface
 
         if ($this->region !== $v) {
             $this->region = $v;
-            $this->modifiedColumns[CountryTableMap::COL_REGION] = true;
+            $this->modifiedColumns[CrmCountryTableMap::COL_REGION] = true;
         }
 
         return $this;
     } // setRegion()
-
-    /**
-     * Set the value of [surfacearea] column.
-     *
-     * @param double $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setSurfacearea($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->surfacearea !== $v) {
-            $this->surfacearea = $v;
-            $this->modifiedColumns[CountryTableMap::COL_SURFACEAREA] = true;
-        }
-
-        return $this;
-    } // setSurfacearea()
-
-    /**
-     * Set the value of [indepyear] column.
-     *
-     * @param int $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setIndepyear($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->indepyear !== $v) {
-            $this->indepyear = $v;
-            $this->modifiedColumns[CountryTableMap::COL_INDEPYEAR] = true;
-        }
-
-        return $this;
-    } // setIndepyear()
-
-    /**
-     * Set the value of [population] column.
-     *
-     * @param int $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setPopulation($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->population !== $v) {
-            $this->population = $v;
-            $this->modifiedColumns[CountryTableMap::COL_POPULATION] = true;
-        }
-
-        return $this;
-    } // setPopulation()
-
-    /**
-     * Set the value of [lifeexpectancy] column.
-     *
-     * @param double $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setLifeexpectancy($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->lifeexpectancy !== $v) {
-            $this->lifeexpectancy = $v;
-            $this->modifiedColumns[CountryTableMap::COL_LIFEEXPECTANCY] = true;
-        }
-
-        return $this;
-    } // setLifeexpectancy()
-
-    /**
-     * Set the value of [gnp] column.
-     *
-     * @param double $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setGnp($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->gnp !== $v) {
-            $this->gnp = $v;
-            $this->modifiedColumns[CountryTableMap::COL_GNP] = true;
-        }
-
-        return $this;
-    } // setGnp()
-
-    /**
-     * Set the value of [gnpold] column.
-     *
-     * @param double $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setGnpold($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->gnpold !== $v) {
-            $this->gnpold = $v;
-            $this->modifiedColumns[CountryTableMap::COL_GNPOLD] = true;
-        }
-
-        return $this;
-    } // setGnpold()
-
-    /**
-     * Set the value of [localname] column.
-     *
-     * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setLocalname($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->localname !== $v) {
-            $this->localname = $v;
-            $this->modifiedColumns[CountryTableMap::COL_LOCALNAME] = true;
-        }
-
-        return $this;
-    } // setLocalname()
-
-    /**
-     * Set the value of [governmentform] column.
-     *
-     * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setGovernmentform($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->governmentform !== $v) {
-            $this->governmentform = $v;
-            $this->modifiedColumns[CountryTableMap::COL_GOVERNMENTFORM] = true;
-        }
-
-        return $this;
-    } // setGovernmentform()
-
-    /**
-     * Set the value of [headofstate] column.
-     *
-     * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setHeadofstate($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->headofstate !== $v) {
-            $this->headofstate = $v;
-            $this->modifiedColumns[CountryTableMap::COL_HEADOFSTATE] = true;
-        }
-
-        return $this;
-    } // setHeadofstate()
-
-    /**
-     * Set the value of [capital] column.
-     *
-     * @param int $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setCapital($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->capital !== $v) {
-            $this->capital = $v;
-            $this->modifiedColumns[CountryTableMap::COL_CAPITAL] = true;
-        }
-
-        return $this;
-    } // setCapital()
-
-    /**
-     * Set the value of [code2] column.
-     *
-     * @param string $v new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
-     */
-    public function setCode2($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->code2 !== $v) {
-            $this->code2 = $v;
-            $this->modifiedColumns[CountryTableMap::COL_CODE2] = true;
-        }
-
-        return $this;
-    } // setCode2()
 
     /**
      * Sets the value of the [active] column.
@@ -914,7 +438,7 @@ abstract class Country implements ActiveRecordInterface
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
      * @param  boolean|integer|string $v The new value
-     * @return $this|\models\models\Country The current object (for fluent API support)
+     * @return $this|\models\models\CrmCountry The current object (for fluent API support)
      */
     public function setActive($v)
     {
@@ -928,7 +452,7 @@ abstract class Country implements ActiveRecordInterface
 
         if ($this->active !== $v) {
             $this->active = $v;
-            $this->modifiedColumns[CountryTableMap::COL_ACTIVE] = true;
+            $this->modifiedColumns[CrmCountryTableMap::COL_ACTIVE] = true;
         }
 
         return $this;
@@ -944,46 +468,6 @@ abstract class Country implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->code !== '') {
-                return false;
-            }
-
-            if ($this->name !== '') {
-                return false;
-            }
-
-            if ($this->continent !== 'Asia') {
-                return false;
-            }
-
-            if ($this->region !== '') {
-                return false;
-            }
-
-            if ($this->surfacearea !== 0.0) {
-                return false;
-            }
-
-            if ($this->population !== 0) {
-                return false;
-            }
-
-            if ($this->localname !== '') {
-                return false;
-            }
-
-            if ($this->governmentform !== '') {
-                return false;
-            }
-
-            if ($this->code2 !== '') {
-                return false;
-            }
-
-            if ($this->active !== true) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -1010,52 +494,16 @@ abstract class Country implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : CountryTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CountryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : CrmCountryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CountryTableMap::translateFieldName('Continent', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CrmCountryTableMap::translateFieldName('Continent', TableMap::TYPE_PHPNAME, $indexType)];
             $this->continent = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CountryTableMap::translateFieldName('Region', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CrmCountryTableMap::translateFieldName('Region', TableMap::TYPE_PHPNAME, $indexType)];
             $this->region = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CountryTableMap::translateFieldName('Surfacearea', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->surfacearea = (null !== $col) ? (double) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CountryTableMap::translateFieldName('Indepyear', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->indepyear = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CountryTableMap::translateFieldName('Population', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->population = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CountryTableMap::translateFieldName('Lifeexpectancy', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->lifeexpectancy = (null !== $col) ? (double) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CountryTableMap::translateFieldName('Gnp', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->gnp = (null !== $col) ? (double) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CountryTableMap::translateFieldName('Gnpold', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->gnpold = (null !== $col) ? (double) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CountryTableMap::translateFieldName('Localname', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->localname = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CountryTableMap::translateFieldName('Governmentform', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->governmentform = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CountryTableMap::translateFieldName('Headofstate', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->headofstate = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CountryTableMap::translateFieldName('Capital', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->capital = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : CountryTableMap::translateFieldName('Code2', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code2 = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : CountryTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CrmCountryTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
@@ -1065,10 +513,10 @@ abstract class Country implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 16; // 16 = CountryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = CrmCountryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\models\\models\\Country'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\models\\models\\CrmCountry'), 0, $e);
         }
     }
 
@@ -1110,13 +558,13 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(CrmCountryTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildCountryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildCrmCountryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1135,8 +583,8 @@ abstract class Country implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Country::setDeleted()
-     * @see Country::isDeleted()
+     * @see CrmCountry::setDeleted()
+     * @see CrmCountry::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -1145,11 +593,11 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CrmCountryTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildCountryQuery::create()
+            $deleteQuery = ChildCrmCountryQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -1184,7 +632,7 @@ abstract class Country implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CrmCountryTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1203,7 +651,7 @@ abstract class Country implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CountryTableMap::addInstanceToPool($this);
+                CrmCountryTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1262,57 +710,21 @@ abstract class Country implements ActiveRecordInterface
 
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CountryTableMap::COL_CODE)) {
-            $modifiedColumns[':p' . $index++]  = 'Code';
+        if ($this->isColumnModified(CrmCountryTableMap::COL_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'Name';
+        if ($this->isColumnModified(CrmCountryTableMap::COL_CONTINENT)) {
+            $modifiedColumns[':p' . $index++]  = 'continent';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_CONTINENT)) {
-            $modifiedColumns[':p' . $index++]  = 'Continent';
+        if ($this->isColumnModified(CrmCountryTableMap::COL_REGION)) {
+            $modifiedColumns[':p' . $index++]  = 'region';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_REGION)) {
-            $modifiedColumns[':p' . $index++]  = 'Region';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_SURFACEAREA)) {
-            $modifiedColumns[':p' . $index++]  = 'SurfaceArea';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_INDEPYEAR)) {
-            $modifiedColumns[':p' . $index++]  = 'IndepYear';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_POPULATION)) {
-            $modifiedColumns[':p' . $index++]  = 'Population';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_LIFEEXPECTANCY)) {
-            $modifiedColumns[':p' . $index++]  = 'LifeExpectancy';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GNP)) {
-            $modifiedColumns[':p' . $index++]  = 'GNP';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GNPOLD)) {
-            $modifiedColumns[':p' . $index++]  = 'GNPOld';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_LOCALNAME)) {
-            $modifiedColumns[':p' . $index++]  = 'LocalName';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GOVERNMENTFORM)) {
-            $modifiedColumns[':p' . $index++]  = 'GovernmentForm';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_HEADOFSTATE)) {
-            $modifiedColumns[':p' . $index++]  = 'HeadOfState';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_CAPITAL)) {
-            $modifiedColumns[':p' . $index++]  = 'Capital';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_CODE2)) {
-            $modifiedColumns[':p' . $index++]  = 'Code2';
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_ACTIVE)) {
+        if ($this->isColumnModified(CrmCountryTableMap::COL_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = 'active';
         }
 
         $sql = sprintf(
-            'INSERT INTO country (%s) VALUES (%s)',
+            'INSERT INTO crm_country (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1321,50 +733,14 @@ abstract class Country implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'Code':
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
-                        break;
-                    case 'Name':
+                    case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'Continent':
+                    case 'continent':
                         $stmt->bindValue($identifier, $this->continent, PDO::PARAM_STR);
                         break;
-                    case 'Region':
+                    case 'region':
                         $stmt->bindValue($identifier, $this->region, PDO::PARAM_STR);
-                        break;
-                    case 'SurfaceArea':
-                        $stmt->bindValue($identifier, $this->surfacearea, PDO::PARAM_STR);
-                        break;
-                    case 'IndepYear':
-                        $stmt->bindValue($identifier, $this->indepyear, PDO::PARAM_INT);
-                        break;
-                    case 'Population':
-                        $stmt->bindValue($identifier, $this->population, PDO::PARAM_INT);
-                        break;
-                    case 'LifeExpectancy':
-                        $stmt->bindValue($identifier, $this->lifeexpectancy, PDO::PARAM_STR);
-                        break;
-                    case 'GNP':
-                        $stmt->bindValue($identifier, $this->gnp, PDO::PARAM_STR);
-                        break;
-                    case 'GNPOld':
-                        $stmt->bindValue($identifier, $this->gnpold, PDO::PARAM_STR);
-                        break;
-                    case 'LocalName':
-                        $stmt->bindValue($identifier, $this->localname, PDO::PARAM_STR);
-                        break;
-                    case 'GovernmentForm':
-                        $stmt->bindValue($identifier, $this->governmentform, PDO::PARAM_STR);
-                        break;
-                    case 'HeadOfState':
-                        $stmt->bindValue($identifier, $this->headofstate, PDO::PARAM_STR);
-                        break;
-                    case 'Capital':
-                        $stmt->bindValue($identifier, $this->capital, PDO::PARAM_INT);
-                        break;
-                    case 'Code2':
-                        $stmt->bindValue($identifier, $this->code2, PDO::PARAM_STR);
                         break;
                     case 'active':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
@@ -1408,7 +784,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = CrmCountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1425,51 +801,15 @@ abstract class Country implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getCode();
-                break;
-            case 1:
                 return $this->getName();
                 break;
-            case 2:
+            case 1:
                 return $this->getContinent();
                 break;
-            case 3:
+            case 2:
                 return $this->getRegion();
                 break;
-            case 4:
-                return $this->getSurfacearea();
-                break;
-            case 5:
-                return $this->getIndepyear();
-                break;
-            case 6:
-                return $this->getPopulation();
-                break;
-            case 7:
-                return $this->getLifeexpectancy();
-                break;
-            case 8:
-                return $this->getGnp();
-                break;
-            case 9:
-                return $this->getGnpold();
-                break;
-            case 10:
-                return $this->getLocalname();
-                break;
-            case 11:
-                return $this->getGovernmentform();
-                break;
-            case 12:
-                return $this->getHeadofstate();
-                break;
-            case 13:
-                return $this->getCapital();
-                break;
-            case 14:
-                return $this->getCode2();
-                break;
-            case 15:
+            case 3:
                 return $this->getActive();
                 break;
             default:
@@ -1495,28 +835,16 @@ abstract class Country implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['Country'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['CrmCountry'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Country'][$this->hashCode()] = true;
-        $keys = CountryTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['CrmCountry'][$this->hashCode()] = true;
+        $keys = CrmCountryTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getCode(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getContinent(),
-            $keys[3] => $this->getRegion(),
-            $keys[4] => $this->getSurfacearea(),
-            $keys[5] => $this->getIndepyear(),
-            $keys[6] => $this->getPopulation(),
-            $keys[7] => $this->getLifeexpectancy(),
-            $keys[8] => $this->getGnp(),
-            $keys[9] => $this->getGnpold(),
-            $keys[10] => $this->getLocalname(),
-            $keys[11] => $this->getGovernmentform(),
-            $keys[12] => $this->getHeadofstate(),
-            $keys[13] => $this->getCapital(),
-            $keys[14] => $this->getCode2(),
-            $keys[15] => $this->getActive(),
+            $keys[0] => $this->getName(),
+            $keys[1] => $this->getContinent(),
+            $keys[2] => $this->getRegion(),
+            $keys[3] => $this->getActive(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1536,11 +864,11 @@ abstract class Country implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\models\models\Country
+     * @return $this|\models\models\CrmCountry
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = CrmCountryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1551,57 +879,21 @@ abstract class Country implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\models\models\Country
+     * @return $this|\models\models\CrmCountry
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setCode($value);
-                break;
-            case 1:
                 $this->setName($value);
                 break;
-            case 2:
+            case 1:
                 $this->setContinent($value);
                 break;
-            case 3:
+            case 2:
                 $this->setRegion($value);
                 break;
-            case 4:
-                $this->setSurfacearea($value);
-                break;
-            case 5:
-                $this->setIndepyear($value);
-                break;
-            case 6:
-                $this->setPopulation($value);
-                break;
-            case 7:
-                $this->setLifeexpectancy($value);
-                break;
-            case 8:
-                $this->setGnp($value);
-                break;
-            case 9:
-                $this->setGnpold($value);
-                break;
-            case 10:
-                $this->setLocalname($value);
-                break;
-            case 11:
-                $this->setGovernmentform($value);
-                break;
-            case 12:
-                $this->setHeadofstate($value);
-                break;
-            case 13:
-                $this->setCapital($value);
-                break;
-            case 14:
-                $this->setCode2($value);
-                break;
-            case 15:
+            case 3:
                 $this->setActive($value);
                 break;
         } // switch()
@@ -1628,55 +920,19 @@ abstract class Country implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = CountryTableMap::getFieldNames($keyType);
+        $keys = CrmCountryTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setCode($arr[$keys[0]]);
+            $this->setName($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setName($arr[$keys[1]]);
+            $this->setContinent($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setContinent($arr[$keys[2]]);
+            $this->setRegion($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setRegion($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setSurfacearea($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setIndepyear($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setPopulation($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setLifeexpectancy($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setGnp($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setGnpold($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setLocalname($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setGovernmentform($arr[$keys[11]]);
-        }
-        if (array_key_exists($keys[12], $arr)) {
-            $this->setHeadofstate($arr[$keys[12]]);
-        }
-        if (array_key_exists($keys[13], $arr)) {
-            $this->setCapital($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setCode2($arr[$keys[14]]);
-        }
-        if (array_key_exists($keys[15], $arr)) {
-            $this->setActive($arr[$keys[15]]);
+            $this->setActive($arr[$keys[3]]);
         }
     }
 
@@ -1697,7 +953,7 @@ abstract class Country implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\models\models\Country The current object, for fluid interface
+     * @return $this|\models\models\CrmCountry The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1717,55 +973,19 @@ abstract class Country implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(CountryTableMap::DATABASE_NAME);
+        $criteria = new Criteria(CrmCountryTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(CountryTableMap::COL_CODE)) {
-            $criteria->add(CountryTableMap::COL_CODE, $this->code);
+        if ($this->isColumnModified(CrmCountryTableMap::COL_NAME)) {
+            $criteria->add(CrmCountryTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_NAME)) {
-            $criteria->add(CountryTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(CrmCountryTableMap::COL_CONTINENT)) {
+            $criteria->add(CrmCountryTableMap::COL_CONTINENT, $this->continent);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_CONTINENT)) {
-            $criteria->add(CountryTableMap::COL_CONTINENT, $this->continent);
+        if ($this->isColumnModified(CrmCountryTableMap::COL_REGION)) {
+            $criteria->add(CrmCountryTableMap::COL_REGION, $this->region);
         }
-        if ($this->isColumnModified(CountryTableMap::COL_REGION)) {
-            $criteria->add(CountryTableMap::COL_REGION, $this->region);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_SURFACEAREA)) {
-            $criteria->add(CountryTableMap::COL_SURFACEAREA, $this->surfacearea);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_INDEPYEAR)) {
-            $criteria->add(CountryTableMap::COL_INDEPYEAR, $this->indepyear);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_POPULATION)) {
-            $criteria->add(CountryTableMap::COL_POPULATION, $this->population);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_LIFEEXPECTANCY)) {
-            $criteria->add(CountryTableMap::COL_LIFEEXPECTANCY, $this->lifeexpectancy);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GNP)) {
-            $criteria->add(CountryTableMap::COL_GNP, $this->gnp);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GNPOLD)) {
-            $criteria->add(CountryTableMap::COL_GNPOLD, $this->gnpold);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_LOCALNAME)) {
-            $criteria->add(CountryTableMap::COL_LOCALNAME, $this->localname);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_GOVERNMENTFORM)) {
-            $criteria->add(CountryTableMap::COL_GOVERNMENTFORM, $this->governmentform);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_HEADOFSTATE)) {
-            $criteria->add(CountryTableMap::COL_HEADOFSTATE, $this->headofstate);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_CAPITAL)) {
-            $criteria->add(CountryTableMap::COL_CAPITAL, $this->capital);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_CODE2)) {
-            $criteria->add(CountryTableMap::COL_CODE2, $this->code2);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_ACTIVE)) {
-            $criteria->add(CountryTableMap::COL_ACTIVE, $this->active);
+        if ($this->isColumnModified(CrmCountryTableMap::COL_ACTIVE)) {
+            $criteria->add(CrmCountryTableMap::COL_ACTIVE, $this->active);
         }
 
         return $criteria;
@@ -1783,7 +1003,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        throw new LogicException('The Country object has no primary key');
+        throw new LogicException('The CrmCountry object has no primary key');
 
         return $criteria;
     }
@@ -1849,28 +1069,16 @@ abstract class Country implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \models\models\Country (or compatible) type.
+     * @param      object $copyObj An object of \models\models\CrmCountry (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setCode($this->getCode());
         $copyObj->setName($this->getName());
         $copyObj->setContinent($this->getContinent());
         $copyObj->setRegion($this->getRegion());
-        $copyObj->setSurfacearea($this->getSurfacearea());
-        $copyObj->setIndepyear($this->getIndepyear());
-        $copyObj->setPopulation($this->getPopulation());
-        $copyObj->setLifeexpectancy($this->getLifeexpectancy());
-        $copyObj->setGnp($this->getGnp());
-        $copyObj->setGnpold($this->getGnpold());
-        $copyObj->setLocalname($this->getLocalname());
-        $copyObj->setGovernmentform($this->getGovernmentform());
-        $copyObj->setHeadofstate($this->getHeadofstate());
-        $copyObj->setCapital($this->getCapital());
-        $copyObj->setCode2($this->getCode2());
         $copyObj->setActive($this->getActive());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1886,7 +1094,7 @@ abstract class Country implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \models\models\Country Clone of current object.
+     * @return \models\models\CrmCountry Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1906,25 +1114,12 @@ abstract class Country implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->code = null;
         $this->name = null;
         $this->continent = null;
         $this->region = null;
-        $this->surfacearea = null;
-        $this->indepyear = null;
-        $this->population = null;
-        $this->lifeexpectancy = null;
-        $this->gnp = null;
-        $this->gnpold = null;
-        $this->localname = null;
-        $this->governmentform = null;
-        $this->headofstate = null;
-        $this->capital = null;
-        $this->code2 = null;
         $this->active = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1952,7 +1147,7 @@ abstract class Country implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CountryTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(CrmCountryTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

@@ -19,32 +19,6 @@ CREATE TABLE `city`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- country
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `country`;
-
-CREATE TABLE `country`
-(
-    `Code` CHAR(3) DEFAULT '' NOT NULL,
-    `Name` CHAR(52) DEFAULT '' NOT NULL,
-    `Continent` enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South America') DEFAULT 'Asia' NOT NULL,
-    `Region` CHAR(26) DEFAULT '' NOT NULL,
-    `SurfaceArea` FLOAT(10,2) DEFAULT 0.00 NOT NULL,
-    `IndepYear` SMALLINT,
-    `Population` INTEGER DEFAULT 0 NOT NULL,
-    `LifeExpectancy` FLOAT(3,1),
-    `GNP` FLOAT(10,2),
-    `GNPOld` FLOAT(10,2),
-    `LocalName` CHAR(45) DEFAULT '' NOT NULL,
-    `GovernmentForm` CHAR(45) DEFAULT '' NOT NULL,
-    `HeadOfState` CHAR(60),
-    `Capital` INTEGER,
-    `Code2` CHAR(2) DEFAULT '' NOT NULL,
-    `active` TINYINT(1) DEFAULT 1
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
 -- countrylanguage
 -- ---------------------------------------------------------------------
 
@@ -105,6 +79,20 @@ CREATE TABLE `crm_address`
     CONSTRAINT `crm_address_ibfk_2`
         FOREIGN KEY (`crm_address_id`)
         REFERENCES `crm_account` (`crm_account_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- crm_country
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `crm_country`;
+
+CREATE TABLE `crm_country`
+(
+    `name` VARCHAR(100),
+    `continent` VARCHAR(100),
+    `region` VARCHAR(100),
+    `active` TINYINT(1)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

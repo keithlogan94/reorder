@@ -2,10 +2,10 @@
 
 namespace models\models;
 
-use models\models\Base\Country as BaseCountry;
+use models\models\Base\CrmCountryQuery as BaseCrmCountryQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'country' table.
+ * Skeleton subclass for performing query and update operations on the 'crm_country' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use models\models\Base\Country as BaseCountry;
  * long as it does not already exist in the output directory.
  *
  */
-class Country extends BaseCountry
+class CrmCountryQuery extends BaseCrmCountryQuery
 {
 
 }

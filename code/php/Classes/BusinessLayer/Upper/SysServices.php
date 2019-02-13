@@ -8,8 +8,9 @@
 
 namespace code\php\Classes\BusinessLayer\Upper;
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/DataWrapper.php';
+use code\php\Classes\DataLayer\Upper\DataWrapper;
 use Exception;
-use models\models\CountryQuery;
 
 
 abstract class SysServices
@@ -28,16 +29,19 @@ abstract class SysServices
 		try {
 			if (!is_array($params)) throw new Exception('SysServices::getCountries() $params must be an array');
 
-			$q = CountryQuery::create()->filterByActive(TRUE)->find();
+			$counties = DataWrapper::query([
+			    'sql' => 'SELECT * FROM country',
+                'mode' => 'getAllRows'
+            ]);
 
-			$countries = [];
-			foreach ($q as $country) {
-			    $countries[] = [
-			        'name' => $country->getName()
+			$return = [];
+			foreach ($counties as $county) {
+			    $return[] = [
+			        'name' => $county['Name']
                 ];
             }
 
-			return $countries;
+			return $return;
 
 		} catch (Exception $e) {
             throw new Exception('SysServices::getCountries() Failed to get countries',1,$e);
