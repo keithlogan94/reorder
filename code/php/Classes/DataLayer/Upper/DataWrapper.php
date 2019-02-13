@@ -44,8 +44,10 @@ class DataWrapper
         }
 
         if ($result === TRUE) return true;
+        if (mysqli_num_rows($result) === 0) return false;
 
         if (!isset($params['mode'])) $params['mode'] = self::MODE_GET_ALL_ROWS;
+
 
         $return = null;
         switch ($params['mode']) {

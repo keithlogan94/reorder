@@ -22,6 +22,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/
 use code\php\Classes\BusinessLayer\Upper\AccountServices;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/NonLoginMethods.php';
 use code\php\Classes\BusinessLayer\Upper\NonLoginMethods;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/DataLayer/Upper/DataWrapper.php';
+use code\php\Classes\DataLayer\Upper\DataWrapper;
 
 
 use Exception;
@@ -59,15 +61,22 @@ abstract class SysMethods
                 }
             }
 
+            /* dont let user pass in accountId
+            we will get that from username and password passed in */
             if (isset($_POST['accountId'])) {
                 unset($_POST['accountId']);
             }
 
+            //figure out if request contains username and password to an account
             $requestContainsUsername = isset($_POST['reorder_username']) &&
 			is_string($_POST['reorder_username']) && strlen($_POST['reorder_username']) > 0;
             $requestContainsPassword = isset($_POST['reorder_password']) &&
 			is_string($_POST['reorder_password']) && strlen($_POST['reorder_password']) > 0;
 
+            /* if request is trying to create an account or use a Non Login service
+            then process the request else the request must contain a username and password to an account
+            or it will fail
+            */
 			$isRequestToCreateAccount = $_POST['className'] === 'AccountMethods' && $_POST['method'] === 'createAccount';
 			$isNonLoginService = $_POST['className'] === 'NonLoginMethods';
 			if (!$isRequestToCreateAccount && !$isNonLoginService) {
@@ -75,7 +84,7 @@ abstract class SysMethods
 					throw new Exception('user cannot access any method except AccountServices::createAccount ' .
 						' or a Non-Login Service if not providing username and password');
 				}
-				/* if request is not to create an account then 
+				/* if request is not trying to create an account then
 				we want to look up the current account 
 				- this is so that no requests can be made to the server unless 
 				they were sent on behalf of an existing account or to create a new account */
@@ -105,11 +114,68 @@ abstract class SysMethods
                 throw new Exception('SysMethods::handleRequest() requested method does not exist in ' . $class.' object');
             }
 
+            /* validate and sanitize any request value that comes in to $_POST
+            with known validation types in database
+            */
+            $_POST = self::validateInput([
+                'input' => $_POST
+            ]);
+
             $nsClass::$method($_POST);
 
         } catch (Exception $e) {
             throw new Exception('SysMethods::handleRequest() Failed to handle Request', 1, $e);
         }
+    }
+
+    public static function validateInput($params)
+    {
+        if (!isset($params['input'])) throw new Exception('SysMethods::validateInput() input must be passed into params');
+
+        $returnArr = [];
+
+        foreach ($params['input'] as $key => $value) {
+            if (is_array($value)) throw new Exception('SysMethods::validateInput() value of input must not be an array');
+
+            $row = DataWrapper::query([
+                'sql' => "SELECT * FROM input_validation WHERE allowed_key = '$key';",
+                'mode' => DataWrapper::MODE_GET_SINGLE_ROW
+            ]);
+
+            if ($row === false) {
+                throw new Exception('SysMethods::validateInput() Failed to find allowed_key for ' . $key);
+            }
+
+            $validationType = $row['validation_type'];
+            $regex = $row['regex'];
+
+            switch ($validationType) {
+                case 'regex':
+                    if (preg_match('/'.$regex.'/',$value) !== 1) {
+                        throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . ' with value ' . $value);
+                    }
+                    $returnArr[$key] = $value;
+                    break;
+                case 'email':
+                    if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        throw new Exception('SysMethods::validateInput() Failed to pass email validation for input ' . $key . ' with value ' . $value);
+                    }
+                    $returnArr[$key] = $value;
+                    break;
+                case 'float':
+                    if (is_numeric($value))
+                        $returnArr[$key] = (float)$value;
+                    else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                    break;
+                case 'int':
+                    if (is_numeric($value))
+                        $returnArr[$key] = (int)$value;
+                    else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                    break;
+            }
+        }
+
+        return $returnArr;
     }
 
     public static function getConfig($params)
