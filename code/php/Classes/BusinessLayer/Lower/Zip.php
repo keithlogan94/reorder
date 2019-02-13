@@ -56,7 +56,7 @@ class Zip
               </div>
 HTML;
 
-        return $html;   
+        return $html;
 
     }
 
@@ -68,7 +68,7 @@ SELECT Zipcode AS 'zip', s.name AS 'state', s.abv AS 'state_abv',z.City AS 'city
 FROM zipcode z
 INNER JOIN state s ON z.State = s.abv AND s.country = z.Country
 INNER JOIN country c ON s.country = c.Code OR s.country = c.Code2
-WHERE Zipcode = '80109'
+WHERE Zipcode = '{$this->zip}'
 ;
 SQL;
 
