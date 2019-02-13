@@ -171,6 +171,9 @@ abstract class SysMethods
                             $returnArr[$key] = (int)$value;
                         else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
                         break;
+                    default:
+                        throw new Exception('SysMethods::validateInput() validation type not supported ' . $validationType);
+                        break;
                 }
             }
             return $returnArr;
