@@ -159,6 +159,7 @@ abstract class SysMethods
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value cant be empty.');
                         } else if (empty($value) && $cantBeEmpty === false) {
                             /* if value is empty and can be empty then continue to next key value */
+                            $returnArr[$key] = '';
                             continue;
                         }
                         if (preg_match('/' . $regex . '/', $value) !== 1) {
@@ -174,6 +175,7 @@ abstract class SysMethods
                             set_user_error('Please enter a value for ' . $displayName . '. '  . $validationDescription);
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value cant be empty.');
                         } else if (empty($value) && $cantBeEmpty === false) {
+                            $returnArr[$key] = '';
                             continue;
                         }
                         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
@@ -188,6 +190,7 @@ abstract class SysMethods
                             set_user_error('Please enter a value for ' . $displayName . '. '  . $validationDescription);
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value cant be empty.');
                         } else if (empty($value) && $cantBeEmpty === false) {
+                            $returnArr[$key] = '';
                             continue;
                         }
                         if (is_numeric($value))
@@ -203,6 +206,7 @@ abstract class SysMethods
                             set_user_error('Please enter a value for ' . $displayName . '. '  . $validationDescription);
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value cant be empty.');
                         } else if (empty($value) && $cantBeEmpty === false) {
+                            $returnArr[$key] = '';
                             continue;
                         }
                         if (is_numeric($value))
