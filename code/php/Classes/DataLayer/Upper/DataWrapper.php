@@ -37,6 +37,7 @@ class DataWrapper
             throw new Exception('DataWrapper::query() Failed to connect: '.mysqli_connect_error());
         }
 
+        if ($params['noEscape'] !== true) $params['sql'] = mysqli_real_escape_string($conn, $params['sql']);
         $result = mysqli_query($conn, $params['sql']);
 
         if ($result === FALSE) {
