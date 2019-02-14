@@ -81,7 +81,7 @@ abstract class SysMethods
 			$isNonLoginService = $_POST['className'] === 'NonLoginMethods';
 			if (!$isRequestToCreateAccount && !$isNonLoginService) {
 				if (!$requestContainsUsername || !$requestContainsPassword) {
-					throw new Exception('user cannot access any method except AccountServices::createAccount ' .
+					throw new Exception('SysMethods::handleRequest() user cannot access any method except AccountServices::createAccount ' .
 						' or a Non-Login Service if not providing username and password');
 				}
 				/* if request is not trying to create an account then
@@ -93,14 +93,14 @@ abstract class SysMethods
 					'password' => $_POST['reorder_password']
 				]);
 				if ($accountId === false) {
-					throw new Exception('user credentials were incorrect');
+					throw new Exception('SysMethods::handleRequest() user credentials were incorrect');
 				}
 				if (is_numeric($accountId)) {
 					unset($_POST['reorder_password']);
 					unset($_POST['reorder_username']);
 					$_POST['accountId'] = $accountId;
 				} else {
-					throw new Exception('an error occurred getting accountId from user credentials');
+					throw new Exception('SysMethods::handleRequest() an error occurred getting accountId from user credentials');
 				}					
 			}
 
