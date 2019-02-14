@@ -40,7 +40,7 @@ class DataWrapper
             throw new Exception('DataWrapper::query() Failed to connect: '.mysqli_connect_error());
         }
 
-        if (is_array($params['modify_array'])) {
+        if (isset($params['modify_array']) && is_array($params['modify_array'])) {
             if (in_array(self::MODIFY_QUERY_ESCAPE, $params['modify_array'])) {
                 $params['sql'] = mysqli_real_escape_string($conn, $params['sql']);
             }
