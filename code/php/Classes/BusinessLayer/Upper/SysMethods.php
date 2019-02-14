@@ -148,9 +148,15 @@ abstract class SysMethods
 
                 $validationType = $row['validation_type'];
                 $regex = $row['regex'];
+                $cantBeEmpty = $row['cant_be_empty'] === 1 ? true : false;
+                $displayName = $row['display_name'];
 
                 switch ($validationType) {
                     case 'regex':
+                        if (empty($value) && $cantBeEmpty === true) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' can\'t be empty.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value can\'t be empty.');
+                        }
                         if (preg_match('/' . $regex . '/', $value) !== 1) {
                             set_user_error(['badValueForKey' => $key,'userMessage'=>$value. ' is not accepted.']);
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . ' with value ' . $value);
@@ -158,6 +164,10 @@ abstract class SysMethods
                         $returnArr[$key] = $value;
                         break;
                     case 'email':
+                        if (empty($value) && $cantBeEmpty === true) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' can\'t be empty.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value can\'t be empty.');
+                        }
                         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             set_user_error(['badValueForKey' => $key,'userMessage'=>'The email '.$value. ' is invalid.']);
                             throw new Exception('SysMethods::validateInput() Failed to pass email validation for input ' . $key . ' with value ' . $value);
@@ -165,6 +175,10 @@ abstract class SysMethods
                         $returnArr[$key] = $value;
                         break;
                     case 'float':
+                        if (empty($value) && $cantBeEmpty === true) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' can\'t be empty.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value can\'t be empty.');
+                        }
                         if (is_numeric($value))
                             $returnArr[$key] = (float)$value;
                         else {
@@ -173,6 +187,10 @@ abstract class SysMethods
                         }
                         break;
                     case 'int':
+                        if (empty($value) && $cantBeEmpty === true) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' can\'t be empty.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value can\'t be empty.');
+                        }
                         if (is_numeric($value))
                             $returnArr[$key] = (int)$value;
                         else {
