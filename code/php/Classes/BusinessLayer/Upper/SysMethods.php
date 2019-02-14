@@ -148,14 +148,14 @@ abstract class SysMethods
 
                 $validationType = $row['validation_type'];
                 $regex = $row['regex'];
-                $cantBeEmpty = $row['cant_be_empty'] === 1 ? true : false;
+                $cantBeEmpty = $row['cant_be_empty'] == 1 ? true : false;
                 $displayName = $row['display_name'];
 
                 switch ($validationType) {
                     case 'regex':
                         if (empty($value) && $cantBeEmpty === true) {
-                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' can\'t be empty.']);
-                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value can\'t be empty.');
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$displayName. ' cant be empty.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . '. Value cant be empty.');
                         }
                         if (preg_match('/' . $regex . '/', $value) !== 1) {
                             set_user_error(['badValueForKey' => $key,'userMessage'=>$value. ' is not accepted.']);
