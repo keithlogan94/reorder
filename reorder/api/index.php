@@ -33,26 +33,29 @@ try {
 } catch (Exception $e) {
     http_response_code(500);
 
-    //if test mode is not enabled then dont show error messages
-    $testMode = new TestMode();
-    if (!$testMode->isEnabled()) exit;
-
 	$errorMessages = [];
 	do {
 		$errorMessages[] = $e->getMessage();
 	} while (($e = $e->getPrevious()) instanceof Exception);
 	
 	//possibly return error that user can be displayed to user
-	if (get_user_error()) {
-		$res = json_encode(['errors'=>$errorMessages, 'userError'=>get_user_error()]);	
-	} else {
-		$res = json_encode(['errors'=>$errorMessages]);	
-	}
+    $testMode = new TestMode();
+    if ($testMode->isEnabled()) {
+        //test mode is enabled
+        if (get_user_error()) {
+            $res = json_encode(['errors'=>$errorMessages, 'userError'=>get_user_error()]);
+        } else {
+            $res = json_encode(['errors'=>$errorMessages]);
+        }
+    } else {
+        //live mode only send user errors not debugging errors
+        $res = json_encode(['userError'=>get_user_error()]);
+    }
 
 	//log errors to database
     $errorLog = [
         'input' => $_POST,
-        'exceptionMessages' => $errorMessages
+        'exceptionMessages' => ['errors'=>$errorMessages, 'userError'=>get_user_error()]
     ];
 	$errorLog = json_encode($errorLog);
 	if (json_last_error() !== JSON_ERROR_NONE) $errorLog = 'json_encode error: ' . json_last_error_msg();

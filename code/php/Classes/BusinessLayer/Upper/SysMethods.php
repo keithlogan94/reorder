@@ -142,6 +142,7 @@ abstract class SysMethods
                 ]);
 
                 if ($row === false) {
+                    set_user_error(['badKey' => $key]);
                     throw new Exception('SysMethods::validateInput() Failed to find allowed_key for ' . $key);
                 }
 
@@ -151,12 +152,14 @@ abstract class SysMethods
                 switch ($validationType) {
                     case 'regex':
                         if (preg_match('/' . $regex . '/', $value) !== 1) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>$value. ' is not accepted.']);
                             throw new Exception('SysMethods::validateInput() Failed to pass validation for input ' . $key . ' with value ' . $value);
                         }
                         $returnArr[$key] = $value;
                         break;
                     case 'email':
                         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>'The email '.$value. ' is invalid.']);
                             throw new Exception('SysMethods::validateInput() Failed to pass email validation for input ' . $key . ' with value ' . $value);
                         }
                         $returnArr[$key] = $value;
@@ -164,12 +167,18 @@ abstract class SysMethods
                     case 'float':
                         if (is_numeric($value))
                             $returnArr[$key] = (float)$value;
-                        else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        else {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>'The value '.$value.' is an invalid number.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        }
                         break;
                     case 'int':
                         if (is_numeric($value))
                             $returnArr[$key] = (int)$value;
-                        else throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        else {
+                            set_user_error(['badValueForKey' => $key,'userMessage'=>'The value '.$value.' is an invalid number.']);
+                            throw new Exception('SysMethods::validateInput() Failed to pass numeric validation for input ' . $key . ' with value ' . $value);
+                        }
                         break;
                     default:
                         throw new Exception('SysMethods::validateInput() validation type not supported ' . $validationType);

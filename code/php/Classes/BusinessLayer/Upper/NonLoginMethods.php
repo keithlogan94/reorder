@@ -31,6 +31,13 @@ class NonLoginMethods
         }
     }
 
+    public static function validateInput($params)
+    {
+        /* validation already happens before reaching this point
+        so just return okay response */
+        echo json_encode(['valid' => true]);
+    }
+
     public static function getCountries($params)
     {
         try {
