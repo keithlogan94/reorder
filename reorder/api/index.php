@@ -17,8 +17,8 @@
  }
  
  function set_user_error($error) {
-	 if (isset($GLOBALS['user_error'])) throw new Exception('can\'t set user error if already set');
-	 $GLOBALS['user_error'] = $error;
+     http_response_code(501);
+     exit($error);
  }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/code/php/Classes/BusinessLayer/Upper/SysMethods.php';
