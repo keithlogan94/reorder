@@ -22,6 +22,9 @@ class DataWrapper
     const MODE_GET_SINGLE_ROW = 2;
     const MODE_GET_RESULT = 3;
 
+    const MODIFY_QUERY_REMOVE_SINGLE_QUOTES = 1;
+    const MODIFY_QUERY_ESCAPE = 2;
+
     public static function query($params)
     {
         if (!is_array($params)) {
@@ -37,7 +40,15 @@ class DataWrapper
             throw new Exception('DataWrapper::query() Failed to connect: '.mysqli_connect_error());
         }
 
-        if ($params['noEscape'] !== true) $params['sql'] = mysqli_real_escape_string($conn, $params['sql']);
+        if (is_array($params['modify_array'])) {
+            if (in_array(self::MODIFY_QUERY_ESCAPE, $params['modify_array'])) {
+                $params['sql'] = mysqli_real_escape_string($conn, $params['sql']);
+            }
+            if (in_array(self::MODIFY_QUERY_REMOVE_SINGLE_QUOTES, $params['modify_array'])) {
+                $params['sql'] = str_replace("'",'',$params['sql']);
+            }
+        }
+
         $result = mysqli_query($conn, $params['sql']);
 
         if ($result === FALSE) {

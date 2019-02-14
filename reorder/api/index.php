@@ -60,7 +60,10 @@ try {
 	$errorLog = json_encode($errorLog);
 	if (json_last_error() !== JSON_ERROR_NONE) $errorLog = 'json_encode error: ' . json_last_error_msg();
     DataWrapper::query([
-        'sql' => "INSERT INTO error_log (json_error) VALUES ('$errorLog');"
+        'sql' => "INSERT INTO error_log (json_error) VALUES ('$errorLog');",
+        'modify_array' => [
+            DataWrapper::MODIFY_QUERY_REMOVE_SINGLE_QUOTES
+        ]
     ]);
 
     if (json_last_error() !== JSON_ERROR_NONE) exit('error: ' . json_last_error_msg());
