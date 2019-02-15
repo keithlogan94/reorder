@@ -32,6 +32,7 @@ use code\php\Classes\BusinessLayer\Upper\UPCItem;
 
 use Exception;
 use models\models\CrmEmailQuery;
+use models\models\CrmLoginCredentials;
 
 class Account
 {
@@ -109,7 +110,7 @@ class Account
         $this->email = $email;
     }
 
-    public static function createAccount($email, $firstName, $lastName, $middleName, $phone, $gender)
+    public static function createAccount($email, $firstName, $lastName, $phone, $username,$password)
     {
         if (self::doesAccountExist($email)) {
 			set_user_error('Sorry, that email is already in use.');
@@ -120,7 +121,8 @@ class Account
         $account->save();
         $newAccount = new Account($account->getCrmAccountId());
         $newAccount->setEmailObject(Email::createEmail($newAccount, $email));
-        $newAccount->setPersonObject(Person::createPerson($newAccount,$firstName,$lastName,$middleName,$phone,$gender));
+        $newAccount->setPersonObject(Person::createPerson($newAccount,$firstName,$lastName,$phone));
+        $newAccount->setReorderLogin(ReOrderLogin::createLogin($newAccount,$username,$password));
 
         return $newAccount;
     }
@@ -197,6 +199,11 @@ class Account
             $this->reorderLogin = new ReOrderLogin($this);
         }
         return $this->reorderLogin;
+    }
+
+    public function setReorderLogin($login)
+    {
+        $this->reorderLogin = $login;
     }
 
 

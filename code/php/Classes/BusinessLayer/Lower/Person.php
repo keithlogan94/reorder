@@ -36,7 +36,7 @@ class Person
         return is_null($q);
     }
 
-    public static function createPerson(&$account,$firstName,$lastName,$middleName,$phone,$gender)
+    public static function createPerson(&$account,$firstName,$lastName,$phone)
     {
         /* @var $account Account*/
         if (!self::canCreatePerson($account->getCrmAccountId())) throw new Exception('person record already exists');
@@ -44,9 +44,7 @@ class Person
         $person->setCrmAccountId($account->getCrmAccountId());
         $person->setFirstName($firstName);
         $person->setLastName($lastName);
-        $person->setMiddleName($middleName);
         $person->setPhoneNumber($phone);
-        $person->setGender($gender);
         $person->save();
         return new Person($account);
     }

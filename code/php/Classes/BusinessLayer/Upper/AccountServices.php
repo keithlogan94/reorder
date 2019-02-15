@@ -60,27 +60,15 @@ abstract class AccountServices
             if (!is_string($params['email'])) {
                 throw new Exception('AccountMethods::createAccount() email must be a string');
             }
-            if (!isset($params['gender'])) {
-                throw new Exception('AccountMethods::createAccount() gender must be sent in request');
-            }
-            if (!is_string($params['gender'])) {
-                throw new Exception('AccountMethods::createAccount() gender must be a string');
-            }
-            if (isset($params['birthday'])) {
-                if (!is_string($params['birthday'])) throw new Exception('AccountMethods::createAccount() birthday must be string');
-                if (!SysServices::isValidDateString(['date' => $params['birthday']])) {
-                    throw new Exception('AccountMethods::createAccount() date string is not valid');
-                }
+            if (!is_string($params['password'])) {
+                throw new Exception('AccountMethods::createAccount() password must be a string');
             }
             if (isset($params['phone'])) {
                 if (!is_string($params['phone'])) throw new Exception('AccountMethods::createAccount() phone must be string');
             }
-            if (isset($params['middleName'])) {
-                if (!is_string($params['middleName'])) throw new Exception('AccountMethods::createAccount() middleName must be string');
-            }
 
-            $account = Account::createAccount($params['email'], $params['firstName'],$params['lastName'],$params['middleName'],
-                $params['phone'],$params['gender']);
+            $account = Account::createAccount($params['email'], $params['firstName'],$params['lastName'],
+                $params['phone'], $params['email'],$params['password']);
 
             return $account->getCrmAccountId();
 
