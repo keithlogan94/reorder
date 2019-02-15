@@ -56,5 +56,16 @@ abstract class AccountMethods
         echo $json;
     }
 
+    public static function findAccount($params)
+    {
+        $res = AccountServices::findAccount($params);
+        $json = json_encode($res);
+
+        if (json_last_error()) {
+            throw new Exception(json_last_error_msg());
+        }
+        echo $json;
+    }
+
 
 }

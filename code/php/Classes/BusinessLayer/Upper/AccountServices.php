@@ -231,18 +231,10 @@ abstract class AccountServices
     public static function findAccount($params)
     {
         try {
-            if (!isset($params['email']) && !isset($params['accountId'])) {
+            if (!isset($params['accountId'])) {
                 throw new \Exception('AccountServices::findAccount() email or accountId must be provided');
             }
-            $account = null;
-            switch (true) {
-                case isset($params['email']):
-                    $account = \code\php\Classes\BusinessLayer\Upper\Account::loadByEmail($params['email']);
-                    break;
-                case isset($params['accountId']):
-                    $account = new \code\php\Classes\BusinessLayer\Upper\Account($params['accountId']);
-                    break;
-            }
+            $account = new \code\php\Classes\BusinessLayer\Upper\Account($params['accountId']);
             return [
                 'accountId' => $account->getCrmAccountId(),
                 'firstName' => $account->getPerson()->getData()->getFirstName(),

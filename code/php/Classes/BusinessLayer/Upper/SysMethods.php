@@ -93,6 +93,7 @@ abstract class SysMethods
 					'password' => $_POST['reorder_password']
 				]);
 				if ($accountId === false) {
+				    set_user_error('User credentials were incorrect.');
 					throw new Exception('SysMethods::handleRequest() user credentials were incorrect');
 				}
 				if (is_numeric($accountId)) {
